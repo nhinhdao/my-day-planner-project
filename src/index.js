@@ -7,6 +7,7 @@ import rootReducer from './reducers/index';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import * as serviceWorker from './serviceWorker';
+import 'bootstrap/dist/css/bootstrap.css';
 require('dotenv').config();
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

@@ -9,9 +9,9 @@ class RenderSearchData extends Component {
   render() {
     const { place } = this.props;
     return (
-      <div onClick={() => this.handleClick(place.id)}>
-        <p>{place.category}</p>
-        <h5>{place.name}</h5>
+      <div onClick={() => this.handleClick(place.id)} className='RenderSearchData'>
+        <small>{place.category}</small>
+        <h6>{place.name}</h6>
       </div>
     )
   }

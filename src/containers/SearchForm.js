@@ -28,8 +28,6 @@ class SearchForm extends Component {
   render() {
     return (
       <div>
-        <h1>Welcome to The Best Place!</h1>
-        <p>Let's find you a place of your interest...</p>
         <form onSubmit={this.handleSubmmit}>
           <label>Enter your search query:</label>
           <input type='text' onChange={this.handleChange} name='searchQuery' value={this.state.searchQuery} placeholder='Ice cream or museum...'></input><br />

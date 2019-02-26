@@ -31,3 +31,7 @@
     transform: rotate(360deg);
   }
 }
+
+.RenderSearchData {
+  border: 1px solid black
+}

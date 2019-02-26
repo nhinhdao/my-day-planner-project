@@ -8,9 +8,10 @@ export default function singleSearchReducer(state={searchPlace: [], loading: fal
         id: data.id,
         name: data.name,
         contact: data.contact.formattedPhone,
-        location: data.location.formattedAddress,
+        location: data.location.formattedAddress.join(", "),
         rating: data.rating,
-        photo: `https://fastly.4sqi.net/img/general/width200${data.photos.groups[1].items[0].suffix}`,
+        description: data.description,
+        photo: `https://fastly.4sqi.net/img/general/width600${data.photos.groups[1].items[0].suffix}`,
         tips: data.tips.groups[0].items[0].text
       }
       return { ...state, searchPlace: searchItem, loading: false };

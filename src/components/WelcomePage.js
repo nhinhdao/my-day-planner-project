@@ -9,12 +9,23 @@ import { connect } from 'react-redux';
 class WelcomePage extends Component {
   render() {
     return (
-      <div>
+      <React.Fragment>
+        <h1>Welcome to The Best Place!</h1>
+        <p>Let's find you a place of your interest...</p>
         <SearchForm handleSearch={this.props.mySearchQuery} />
-        {this.props.mySearchData.map(data => <RenderSearchData key={data.id} handleSearch={this.props.singleSearchQuery} place={data}/> )}
         <hr />
-        <RenderSinglePlace myPlace={this.props.myPlace} />
-      </div>
+        <div className="row">
+          <div className='col-1' />
+          <div className="col-3">
+            {this.props.mySearchData.map(data => <RenderSearchData key={data.id} handleSearch={this.props.singleSearchQuery} place={data} />)}
+          </div>
+          <div className="col-7">
+            <RenderSinglePlace myPlace={this.props.myPlace} />
+          </div>
+          <div className='col-1' />
+        </div>
+        
+      </React.Fragment>
     )
   }
 }
