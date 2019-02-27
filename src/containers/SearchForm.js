@@ -10,8 +10,7 @@ class SearchForm extends Component {
   }
 
   search() {
-    let url = `https://api.foursquare.com/v2/venues/search?client_id=${process.env.REACT_APP_CLIENT_ID}&client_secret=${process.env.REACT_APP_CLIENT_SECRET}&v=20160201&near=
-      ${this.state.location}&query=${this.state.searchQuery}&limit=20`;
+    let url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${this.state.searchQuery}&location=${this.state.location}&limit=20`;
     this.props.handleSearch(url);
   }
 

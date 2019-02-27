@@ -7,6 +7,12 @@ import RenderSinglePlace from './RenderSinglePlace';
 import { connect } from 'react-redux';
 
 class WelcomePage extends Component {
+  state = { clicked: false }
+
+  toggleRender = () => {
+    this.setState({clicked: true})
+  }
+  
   render() {
     return (
       <React.Fragment>
@@ -17,10 +23,10 @@ class WelcomePage extends Component {
         <div className="row">
           <div className='col-1' />
           <div className="col-3">
-            {this.props.mySearchData.map(data => <RenderSearchData key={data.id} handleSearch={this.props.singleSearchQuery} place={data} />)}
+            {this.props.mySearchData.map(data => <RenderSearchData key={data.id} handleSearch={this.props.singleSearchQuery} toggleRender={this.toggleRender} place={data} />)}
           </div>
           <div className="col-7">
-            <RenderSinglePlace myPlace={this.props.myPlace} />
+            {this.state.clicked ? <RenderSinglePlace myPlace={this.props.myPlace} /> : null}
           </div>
           <div className='col-1' />
         </div>

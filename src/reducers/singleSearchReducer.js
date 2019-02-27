@@ -7,12 +7,11 @@ export default function singleSearchReducer(state={searchPlace: [], loading: fal
       let searchItem = {
         id: data.id,
         name: data.name,
-        contact: data.contact.formattedPhone,
-        location: data.location.formattedAddress.join(", "),
+        contact: data.display_phone,
+        category: data.categories[0].title,
+        location: data.location.display_address.join(", "),
         rating: data.rating,
-        description: data.description,
-        photo: `https://fastly.4sqi.net/img/general/width600${data.photos.groups[1].items[0].suffix}`,
-        tips: data.tips.groups[0].items[0].text
+        photos: data.photos,
       }
       return { ...state, searchPlace: searchItem, loading: false };
     default:
