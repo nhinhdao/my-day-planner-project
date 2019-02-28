@@ -57,3 +57,11 @@ export function reviewSearchQuery(url) {
       .then(data => dispatch({ type: 'FETCH_REVIEW_SEARCH_QUERY', payload: data.reviews }));
   }
 }
+
+export function addToListQuery(id) {
+  return { type: "ADD_TO_MY_LIST", id }
+}
+
+export function removeFromListQuery(id) {
+  return { type: "REMOVE_FROM_MY_LIST", id }
+}
