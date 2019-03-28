@@ -1,22 +1,27 @@
 import React, { Component } from 'react';
+import {List, Header, Segment} from 'semantic-ui-react';
 
 class RenderSearchData extends Component {
-  handleClick = id => {
-    let url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${id}`
-    this.props.toggleRender();
-    this.props.handleSearch(url);
+  handleClick = (id) => {
+    this.props.handleSearch(id);
   }
 
   render() {
-    const { place } = this.props;
+    const { places } = this.props;
     return (
-      <div onClick={() => this.handleClick(place.id)} className='RenderSearchData'>
-        <div className="scrollit">
-          {place.isAddedToList ? <span> &#9733; </span> : <span> &#9734; </span>}
-          <small>{place.category}</small>
-          <h6>{place.name}</h6>
-        </div>
-      </div>
+      <Segment>
+        <List divided animated verticalAlign='middle'>
+          {places.map(place => 
+            <List.Item key={place.id} onClick={() => this.handleClick(place.id)}>
+              {place.isAddedToList ? <List.Icon name='heart' color='pink' verticalAlign='middle' /> : <List.Icon name='heart outline' verticalAlign='middle' />}
+              <List.Content>
+                <Header as='h4' color='blue'>{place.category}</Header>
+                <List.Description>{place.name}</List.Description>
+              </List.Content>
+            </List.Item>
+          )}
+        </List>
+      </Segment>
     )
   }
 }

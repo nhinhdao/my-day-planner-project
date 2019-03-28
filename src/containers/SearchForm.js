@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Segment, Form, Label, Input } from 'semantic-ui-react';
 
 class SearchForm extends Component {
   constructor () {
@@ -18,23 +19,32 @@ class SearchForm extends Component {
     this.setState({ [event.target.name]: event.target.value })
   }
 
-  handleSubmmit = event => {
+  handleSubmit = event => {
     event.preventDefault();
+    this.props.toggleLoading();
     this.search();
     this.setState({searchQuery: '', location: ''})
   }
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.handleSubmmit}>
-          <label>Enter your search query:</label>
-          <input type='text' onChange={this.handleChange} name='searchQuery' value={this.state.searchQuery} placeholder='Ice cream or museum...'></input><br />
-          <label>Enter your location or zipcode:</label>
-          <input type='text' onChange={this.handleChange} name='location' value={this.state.location} placeholder='Newyork or 10065...'></input><br />
-          <button type='submit'>Search</button>
-        </form>
-      </div>
+        <Form onSubmit={this.handleSubmit}>
+          <Form.Group widths='equal'>
+            <Segment.Group horizontal>
+              <Segment>
+              <Label color='teal' pointing='right'>Enter query</Label>
+              <Input size='mini' type='text' onChange={this.handleChange} name='searchQuery' value={this.state.searchQuery} placeholder='Ice cream or museum...' />
+              </Segment>
+              <Segment>
+              <Label color='teal' pointing='right'>Enter location</Label>
+              <Input size='mini' type='text' onChange={this.handleChange} name='location' value={this.state.location} placeholder='Newyork or 10065...' />
+              </Segment>
+              <Segment>
+              <Form.Button  size='mini' color='blue'>Search</Form.Button>
+              </Segment>
+            </Segment.Group>
+          </Form.Group>
+      </Form>
     )
   }
 }

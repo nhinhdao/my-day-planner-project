@@ -1,18 +1,29 @@
 import React, { Component } from 'react';
+import {Comment, Header, Rating} from 'semantic-ui-react'
 
 class RenderReviews extends Component {
   render() {
     return (
-      <div className="reviewDivs">
+      <Comment.Group>
+        <Header textAlign='center'>
+          Reviews
+        </Header>
         {this.props.reviews.map(review => 
-          <div className="reviewContent" key={review.id}>
-            <img src={review.user.image_url} alt='review' className='iconImage'/>
-            <span>{" "}<strong>Name: </strong>{review.user.name}{" | "}<strong>Rating: </strong>{review.rating}</span><br/>
-            <span><strong>Uploaded: </strong>{review.time_created}</span><br/>
-            <span><strong>Content: </strong>{review.text}</span>
-          </div>
-          )}
-      </div>
+          <Comment key={review.id}>
+            { review.user.image_url ? <Comment.Avatar src={review.user.image_url} /> : <Comment.Avatar src='https://i.imgur.com/MhN5kCx.jpg' />}
+            <Comment.Content>
+              <Comment.Author as='a'>{review.user.name}</Comment.Author>
+              <Comment.Metadata>
+                <div>{review.time_created.split(" ")[0]}</div>
+              </Comment.Metadata>
+              <Comment.Text>{review.text}</Comment.Text>
+              <Comment.Actions>
+                <Comment.Action>Rating: <Rating icon='star' defaultRating={parseInt(review.rating)} maxRating={5} size='mini' disabled/></Comment.Action>
+              </Comment.Actions>
+            </Comment.Content>
+          </Comment>
+        )}
+      </Comment.Group>
     )
   }
 }

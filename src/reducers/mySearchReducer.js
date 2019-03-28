@@ -1,5 +1,5 @@
-export default function mySearchReducer(state = { places: [], myList: [], singlePlace: {}, loading: false }, action) {
-  let places, singlePlace, data;
+export default function mySearchReducer(state = { places: [], myList: [], singlePlace: {}, reviews: [], loading: false }, action) {
+  let places, singlePlace, data, lists;
   switch (action.type) {
     case 'LOADING_QUERY':
       return { ...state, loading: true}
@@ -17,6 +17,7 @@ export default function mySearchReducer(state = { places: [], myList: [], single
         rating: data.rating,
         photos: data.photos,
         isAddedToList: false,
+        reviews: []
       }
       return { ...state, singlePlace: searchItem, loading: false };
     case 'ADD_TO_MY_LIST':
@@ -24,15 +25,18 @@ export default function mySearchReducer(state = { places: [], myList: [], single
         if (place.id !== action.id) { return place }
         return { ...place, isAddedToList: true }
       })];
-      singlePlace = { ...state.singlePlace, isAddedToList: true };
-      return { ...state, places: places, singlePlace: singlePlace, myList: [...state.myList, singlePlace] };
+      singlePlace = { ...state.singlePlace, isAddedToList: true, reviews: [...state.reviews] };
+      lists = state.myList.filter(place => place.id !== singlePlace.id);
+      return { ...state, places: places, singlePlace: singlePlace, myList: [...lists, singlePlace] };
     case 'REMOVE_FROM_MY_LIST':
       places = [...state.places.map(place => {
         if (place.id !== action.id) { return place }
         return { ...place, isAddedToList: false }
       })];
       singlePlace = { ...state.singlePlace, isAddedToList: false };
-      return { ...state, places: places, singlePlace: singlePlace, myList: [...state.myList.filter(place => place.id !== action.id)]};
+      return { ...state, places: places, singlePlace: singlePlace, myList: state.myList.filter(place => place.id !== action.id)};
+    case "FETCH_REVIEW_SEARCH_QUERY":
+      return { ...state, loading: false, reviews: action.payload }
     default:
       return state;
   }

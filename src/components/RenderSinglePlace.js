@@ -4,15 +4,10 @@ import { Carousel } from 'react-responsive-carousel';
 import { reviewSearchQuery, addToListQuery, removeFromListQuery } from '../actions/APIsearch';
 import { connect } from 'react-redux';
 import RenderReviews from './RenderReviews';
+import { Segment, List, Header, Button, Rating, Grid, Divider } from 'semantic-ui-react'
 
 class RenderSinglePlace extends Component {
-  state = { isReviewClicked: false }
-  
-  handleReviews = (id) => {
-    let url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${id}/reviews`;
-    this.setState({isReviewClicked: true})
-    this.props.reviewSearchQuery(url);
-  }
+  state = { place: {}, reviews: []}
 
   handleAddFavorite = (id) => {
     this.props.addToListQuery(id);
@@ -23,42 +18,61 @@ class RenderSinglePlace extends Component {
   }
 
   render() {
-    const { myPlace } = this.props;
-    console.log(myPlace.isAddedToList);
-    const imageList = myPlace.photos ?
+    const { place, reviews } = this.props;
+    const imageList = place.photos ?
       <Carousel showThumbs={false} infiniteLoop={true}>
-        {myPlace.photos.map((photo, index) =>
-          <div key={index} className="side-crop" ><img src={photo} alt={myPlace.name}/></div>)}
+        {place.photos.map((photo, index) =>
+          <div key={index} className="side-crop" ><img src={photo} alt={place.name}/></div>)}
       </Carousel> : "No Images Available";
     
     return (
-      <div>
-        <h3>{myPlace.name}</h3>
-        {imageList}
-        <p>Rating: {myPlace.rating}</p>
-        <p>Category: {myPlace.category}</p>
-        <p>Location: {myPlace.location}</p>
-        <p>Contact: {myPlace.contact}</p>
-        <button onClick={() => this.handleReviews(myPlace.id)}>View reviews</button>
-        {this.state.isReviewClicked ? <RenderReviews reviews={this.props.reviews} /> : null}
-        {myPlace.isAddedToList ? <button onClick={() => this.handleRemoveFromList(myPlace.id)}>Remove from my list</button> : <button onClick={() => this.handleAddFavorite(myPlace.id)}>Add to my favorite list</button>}
-      </div>
+      <Segment>
+        <Grid columns={2}>
+          <Divider vertical></Divider>
+          <Grid.Row>
+            <Grid.Column>
+              <div className='carouselImages'>
+              <Header>{place.name}</Header>
+              {imageList}
+              </div>
+              <Segment basic>
+                <List>
+                  <List.Item>
+                    <List.Icon name='heart' />
+                    <List.Content><Rating icon='star' defaultRating={parseInt(place.rating)} maxRating={5} size='small' disabled/></List.Content>
+                  </List.Item>
+                  <List.Item icon='map signs' content={place.location} />
+                  <List.Item icon='phone' content={place.contact} />
+                </List>
+              </Segment>
+            </Grid.Column>
+            <Grid.Column>
+              <RenderReviews reviews={reviews} />
+              <Segment basic textAlign='center'>
+                {place.isAddedToList ? <Button size='mini' color='teal' onClick={() => this.handleRemoveFromList(place.id)}>Remove from my list</Button> : 
+                  <Button size='mini' color='teal' onClick={() => this.handleAddFavorite(place.id, reviews)}>Add to my favorite list</Button>
+                }
+              </Segment>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Segment>
     )
   }
 }
 
 const mapStateToProps = state => {
   return {
-    reviews: state.reviewsSearch.reviews,
-    myList: state.mySearch.myList
+    reviews: state.reviews,
+    myList: state.myList
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     reviewSearchQuery: url => dispatch(reviewSearchQuery(url)),
-    addToListQuery: place => dispatch(addToListQuery(place)),
-    removeFromListQuery: place => dispatch(removeFromListQuery(place))
+    addToListQuery: id => dispatch(addToListQuery(id)),
+    removeFromListQuery: id => dispatch(removeFromListQuery(id))
   }
 }
         
