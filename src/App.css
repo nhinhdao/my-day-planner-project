@@ -56,11 +56,11 @@ img.iconImage {
 
 .placeImage{
   /* max-height: 100%; */
-  max-width: 85%;
+  max-width: 80%;
 }
 
 .carouselImages{
-  max-width: 80%;
+  max-width: 50%;
   margin: auto;
   text-align: center
 }
@@ -74,12 +74,17 @@ img.iconImage {
 }
 
 .carousel .slide img {
-  max-height: 200px;
+  max-height: 300px;
   max-width: 450px;
   /* change this to whatever you want */
   width: auto;
 }
 
-.ui.comments{
+div.ui.comments{
   max-width: 100%;
+}
+
+div.ui.segment.listPlaces{
+  height: 80%;
+  overflow-y: scroll;
 }

@@ -5,7 +5,7 @@ class RenderReviews extends Component {
   render() {
     return (
       <Comment.Group>
-        <Header textAlign='center'>
+        <Header dividing>
           Reviews
         </Header>
         {this.props.reviews.map(review => 

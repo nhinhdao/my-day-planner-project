@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import logo from '../logo.svg';
-import { mySearchQuery, singleSearchQuery, reviewSearchQuery } from '../actions/APIsearch';
-import RenderSinglePlace from './RenderSinglePlace';
 import {Link} from 'react-router-dom';
 import RenderSearchData from './RenderSearchData';
+import RenderSinglePlace from './RenderSinglePlace';
 import {Grid, Container, Button} from 'semantic-ui-react';
-
 import { connect } from 'react-redux';
+import { mySearchQuery, singleSearchQuery, reviewSearchQuery } from '../actions/APIsearch';
+
 
 class MySavedPlaces extends Component {
   state = { place: null}
@@ -20,26 +20,27 @@ class MySavedPlaces extends Component {
     const {places} = this.props;
     return (
       <React.Fragment>
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <span> My Favorite Places! </span>
-          </header>
-          <Container>
-            <Grid>
-              <Grid.Row>
-                <Grid.Column width={4}>
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <span> My Favorite Places! </span>
+        </header>
+        <Container>
+          <Grid>
+            <Grid.Row>
+              <Grid.Column width={4}>
+                <React.Fragment>
                   <RenderSearchData handleSearch={this.getPlace} places={places}/>
-                </Grid.Column>
-                <Grid.Column width={12}>
-                  {this.state.place &&
-                    <React.Fragment>
-                      <RenderSinglePlace place={this.state.place} reviews={this.state.place.reviews} />
-                      <Link to='/search'><Button size='mini' color='blue'>Continue Searching</Button></Link>
-                    </React.Fragment>
-                  }
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
+                  <Link to='/search'><Button size='mini' color='blue'>Continue Searching</Button></Link>
+                  <Link to='/search'><Button size='mini' color='blue'>Add to my Timetable</Button></Link>
+                </React.Fragment>
+              </Grid.Column>
+              <Grid.Column width={12}>
+                {this.state.place &&
+                  <RenderSinglePlace place={this.state.place} reviews={this.state.place.reviews} />
+                }
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </Container>
       </React.Fragment>
     )

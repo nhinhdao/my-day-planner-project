@@ -35,27 +35,29 @@ class SearchPage extends Component {
           <span> My Trip Planner! </span>
         </header>
         <Container>
-          <Segment basic textAlign='center'>
-            <h1>Let's search around!</h1>
-            <Icon color='purple' name='hand point right outline'/>Tips: For random places, just enter your desired location.
-            <SearchForm handleSearch={this.handleSearchList} toggleLoading={this.toggleLoading}/>
-            { this.state.loadData &&
-              <Loader active inline='centered'/>
-            }
-          </Segment>
           <Grid>
-            <Grid.Row>
-              <Grid.Column width={4}>
-                { places.length > 0 &&
-                  <RenderSearchData handleSearch={this.handleSearchPlace} places={places}/>
+            <Grid.Row textAlign='center'>
+              <Grid.Column>
+                <h1>Let's search around!</h1>
+                <Icon color='purple' name='hand point right outline'/>Tips: For random places, just enter your desired location.
+                <SearchForm handleSearch={this.handleSearchList} toggleLoading={this.toggleLoading}/>
+                { this.state.loadData &&
+                  <Loader active inline='centered'/>
                 }
               </Grid.Column>
-              <Grid.Column width={12}>
-                { !this.state.isLoading &&
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column width={5}>
+                { places.length > 0 &&
                   <React.Fragment>
-                    <RenderSinglePlace place={this.props.myPlace} reviews={this.props.reviews} />
+                    <RenderSearchData handleSearch={this.handleSearchPlace} places={places}/>
                     <Link to='/places'><Button size='mini'color='blue'>View My Saved Places</Button></Link>
                   </React.Fragment>
+                }
+              </Grid.Column>
+              <Grid.Column width={11}>
+                { !this.state.isLoading &&
+                  <RenderSinglePlace place={this.props.myPlace} reviews={this.props.reviews} />
                 }
               </Grid.Column>
             </Grid.Row>

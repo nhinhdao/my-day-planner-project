@@ -9,7 +9,7 @@ class RenderSearchData extends Component {
   render() {
     const { places } = this.props;
     return (
-      <Segment>
+      <Segment className='listPlaces'>
         <List divided animated verticalAlign='middle'>
           {places.map(place => 
             <List.Item key={place.id} onClick={() => this.handleClick(place.id)}>
