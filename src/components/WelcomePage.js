@@ -1,8 +1,23 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
+import LogInForm from '../containers/LogInForm';
+import SignUpForm from '../containers/SignUpForm';
 import {Button, Image, Grid, Label, Divider, Form, Icon, Input, List} from 'semantic-ui-react';
 
 class WelcomePage extends Component {
+  state = {
+    logIn: false,
+    register: false
+  }
+
+  toggleLogIn = () => {
+    this.setState({logIn: true, register: false})
+  }
+
+  toggleRegister = () => {
+    this.props.resetError();
+    this.setState({logIn: false, register: true})
+  }
+
   render() {
     return (
       <Grid centered columns={2}>
@@ -54,9 +69,8 @@ class WelcomePage extends Component {
               <Divider />
 
               <Form.Field inline>
-                <h4>
-                  Ready ? <Icon color='grey' name='arrow right' /> <Link to='/search'><Button color='teal' size='small'>Let's get started!</Button></Link>
-                </h4>
+                <Button color='teal' size='small' onClick={this.toggleLogIn}>Let's get started!</Button>
+                {this.state.logIn && <LogInForm /> }{this.state.register && <SignUpForm />}
               </Form.Field>
             </Form>
           </Grid.Column>

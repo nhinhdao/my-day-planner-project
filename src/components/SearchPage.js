@@ -15,7 +15,7 @@ class SearchPage extends Component {
   toggleLoading = () => {
     this.setState({loadData: true})
   }
-
+  
   handleSearchList = (url) => {
     this.props.mySearchQuery(url).then(() => this.setState({loadData: false}))
   }

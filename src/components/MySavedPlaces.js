@@ -31,7 +31,7 @@ class MySavedPlaces extends Component {
                 <React.Fragment>
                   <RenderSearchData handleSearch={this.getPlace} places={places}/>
                   <Link to='/search'><Button size='mini' color='blue'>Continue Searching</Button></Link>
-                  <Link to='/search'><Button size='mini' color='blue'>Add to my Timetable</Button></Link>
+                  <Link to='/go'><Button size='mini' color='blue'>Add to my Timetable</Button></Link>
                 </React.Fragment>
               </Grid.Column>
               <Grid.Column width={12}>
