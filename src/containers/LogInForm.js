@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Button, Form, Segment } from 'semantic-ui-react';
+import {Form} from 'semantic-ui-react';
+import {signIn} from '../actions/APIsearch';
+import {connect} from 'react-redux'
 
 class LogInForm extends Component {
   constructor () {
@@ -18,26 +20,28 @@ class LogInForm extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    this.props.handleSignIn(this.state)
+    this.props.signIn(this.state)
   }
 
   render() {
     return (
-      <React.Fragment>
-        <Segment basic>
-          <Form  onSubmit={this.handleSubmit}>
+          <Form onSubmit={this.handleSubmit}>
             <Form.Group>
-              <Form.Input fluid icon="user" iconPosition="left" placeholder="Username"
+              <Form.Input icon="user" iconPosition="left" placeholder="Username"
                 onChange={this.handleChange} name='username' value={this.state.username} required />
-              <Form.Input  fluid icon="lock" iconPosition="left" placeholder="Password" type="password"
+              <Form.Input icon="lock" iconPosition="left" placeholder="Password" type="password"
                 onChange={this.handleChange} name='password' value={this.state.password} required />
               <Form.Button type='submit' color="blue" fluid size="large">Log In</Form.Button>
             </Form.Group>
           </Form>
-        </Segment>
-      </React.Fragment>
     )
   }
 }
 
-export default LogInForm;
+const mapDispatchToProps = dispatch => {
+  return {
+    signIn: user => dispatch(signIn(user))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(LogInForm);

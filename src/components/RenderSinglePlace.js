@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
-import { reviewSearchQuery, addToListQuery, removeFromListQuery } from '../actions/APIsearch';
+import { reviewSearchQuery, addToListQuery, removeFromListQuery, createReviews } from '../actions/APIsearch';
 import { connect } from 'react-redux';
 import RenderReviews from './RenderReviews';
 import { Segment, List, Header, Button, Rating } from 'semantic-ui-react'
@@ -9,12 +9,13 @@ import { Segment, List, Header, Button, Rating } from 'semantic-ui-react'
 class RenderSinglePlace extends Component {
   state = { place: {}, reviews: []}
 
-  handleAddFavorite = (id) => {
-    this.props.addToListQuery(id);
+  handleAddFavorite = (place, reviews) => {
+    this.props.addToListQuery(place);
+    this.props.createReviews(reviews);
   }
 
-  handleRemoveFromList = id => {
-    this.props.removeFromListQuery(id)
+  handleRemoveFromList = place => {
+    this.props.removeFromListQuery(place)
   }
 
   render() {
@@ -40,8 +41,8 @@ class RenderSinglePlace extends Component {
             <List.Item icon='phone' content={place.contact} />
           </List>
         <RenderReviews reviews={reviews} />
-        {place.isAddedToList ? <Button size='mini' color='teal' onClick={() => this.handleRemoveFromList(place.id)}>Remove from my list</Button> : 
-            <Button size='mini' color='teal' onClick={() => this.handleAddFavorite(place.id, reviews)}>Add to my favorite list</Button>
+        {place.isAddedToList ? <Button size='mini' color='teal' onClick={() => this.handleRemoveFromList(place)}>Remove from my list</Button> : 
+            <Button size='mini' color='teal' onClick={() => this.handleAddFavorite(place, reviews)}>Add to my favorite list</Button>
           }
       </Segment>
     )
@@ -59,6 +60,7 @@ const mapDispatchToProps = dispatch => {
   return {
     reviewSearchQuery: url => dispatch(reviewSearchQuery(url)),
     addToListQuery: id => dispatch(addToListQuery(id)),
+    createReviews: reviews => dispatch(createReviews(reviews)),
     removeFromListQuery: id => dispatch(removeFromListQuery(id))
   }
 }

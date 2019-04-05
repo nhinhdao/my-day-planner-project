@@ -4,8 +4,8 @@ import {Link} from 'react-router-dom';
 import SearchForm from '../containers/SearchForm';
 import RenderSearchData from './RenderSearchData';
 import RenderSinglePlace from './RenderSinglePlace';
-import {Grid, Container, Segment, Icon, Loader, Button } from 'semantic-ui-react';
-import { mySearchQuery, singleSearchQuery, reviewSearchQuery } from '../actions/APIsearch';
+import {Grid, Container, Icon, Loader, Button } from 'semantic-ui-react';
+import { placesSearchQuery, singleSearchQuery, reviewSearchQuery, signOut } from '../actions/APIsearch';
 
 import { connect } from 'react-redux';
 
@@ -17,26 +17,38 @@ class SearchPage extends Component {
   }
   
   handleSearchList = (url) => {
-    this.props.mySearchQuery(url).then(() => this.setState({loadData: false}))
+    this.props.placesSearchQuery(url).then(() => this.setState({loadData: false}))
   }
+
   handleSearchPlace = (id) => {
     const placeUrl = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${id}`
     const reviewUrl = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${id}/reviews`;
     this.props.singleSearchQuery(placeUrl);
     this.props.reviewSearchQuery(reviewUrl).then(() => this.setState({isLoading: false}))
   }
+
+  handleLogOut = (event) => {
+    event.preventDefault();
+    this.props.signOut();
+    localStorage.clear();
+    this.props.history.push('/');
+  }
   
   render() {
+    if (!localStorage.getItem("userID")){
+      this.props.history.push("/")
+    }
     const {places} = this.props
     return (
       <React.Fragment>
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <span> My Trip Planner! </span>
+          <Button size='mini' onClick={this.handleLogOut}>Log Out</Button>
         </header>
         <Container>
           <Grid>
-            <Grid.Row textAlign='center'>
+            <Grid.Row textAlign='center' className='searchPage'>
               <Grid.Column>
                 <h1>Let's search around!</h1>
                 <Icon color='purple' name='hand point right outline'/>Tips: For random places, just enter your desired location.
@@ -78,9 +90,10 @@ const mapStateToProps = state => {
   
 const mapDispatchToProps = dispatch => {
   return {
-    mySearchQuery: url => dispatch(mySearchQuery(url)),
+    placesSearchQuery: url => dispatch(placesSearchQuery(url)),
     singleSearchQuery: url => dispatch(singleSearchQuery(url)),
-    reviewSearchQuery: url => dispatch(reviewSearchQuery(url))
+    reviewSearchQuery: url => dispatch(reviewSearchQuery(url)),
+    signOut: () => dispatch(signOut())
   }
 }
 

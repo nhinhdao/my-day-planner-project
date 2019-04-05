@@ -33,7 +33,7 @@ class SearchForm extends Component {
             <Segment.Group horizontal>
               <Segment>
               <Label color='teal' pointing='right'>Enter query</Label>
-              <Input size='mini' type='text' onChange={this.handleChange} name='searchQuery' value={this.state.searchQuery} placeholder='Ice cream or museum...' />
+              <Input size='mini' type='text' onChange={this.handleChange} name='searchQuery' value={this.state.searchQuery} placeholder='Ice cream or museum...'/>
               </Segment>
               <Segment>
               <Label color='teal' pointing='right'>Enter location</Label>

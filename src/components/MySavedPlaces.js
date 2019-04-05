@@ -5,7 +5,7 @@ import RenderSearchData from './RenderSearchData';
 import RenderSinglePlace from './RenderSinglePlace';
 import {Grid, Container, Button} from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { mySearchQuery, singleSearchQuery, reviewSearchQuery } from '../actions/APIsearch';
+import { placesSearchQuery, singleSearchQuery, reviewSearchQuery } from '../actions/APIsearch';
 
 
 class MySavedPlaces extends Component {
@@ -55,7 +55,7 @@ const mapStateToProps = state => {
   
 const mapDispatchToProps = dispatch => {
   return {
-    mySearchQuery: url => dispatch(mySearchQuery(url)),
+    placesSearchQuery: url => dispatch(placesSearchQuery(url)),
     singleSearchQuery: url => dispatch(singleSearchQuery(url)),
     reviewSearchQuery: url => dispatch(reviewSearchQuery(url))
   }

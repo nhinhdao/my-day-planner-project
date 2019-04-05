@@ -1,10 +1,14 @@
 import { combineReducers } from 'redux';
 import mySearchReducer from './mySearchReducer';
-import reviewSearchReducer from './reviewSearchReducer';
+import userReducer from './userReducer';
+import savedPlacesReducer from './savedPlacesReducer';
+import timetablesReducer from './timetablesReducer';
 
 const rootReducer = combineReducers({
   mySearch: mySearchReducer,
-  reviewsSearch: reviewSearchReducer
+  currentUser: userReducer,
+  savedPlaces: savedPlacesReducer,
+  timetables: timetablesReducer
 })
 
 export default rootReducer;

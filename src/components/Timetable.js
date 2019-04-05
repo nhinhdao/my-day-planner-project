@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from '../logo.svg';
 import { connect } from 'react-redux';
-import { mySearchQuery, singleSearchQuery, reviewSearchQuery } from '../actions/APIsearch';
+import { placesSearchQuery, singleSearchQuery, reviewSearchQuery } from '../actions/APIsearch';
 
 import Timeline from '../timeline/index';
 
@@ -44,7 +44,7 @@ const mapStateToProps = state => {
   
 const mapDispatchToProps = dispatch => {
   return {
-    mySearchQuery: url => dispatch(mySearchQuery(url)),
+    placesSearchQuery: url => dispatch(placesSearchQuery(url)),
     singleSearchQuery: url => dispatch(singleSearchQuery(url)),
     reviewSearchQuery: url => dispatch(reviewSearchQuery(url))
   }
