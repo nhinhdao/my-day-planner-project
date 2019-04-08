@@ -5,7 +5,7 @@ import SearchForm from '../containers/SearchForm';
 import RenderSearchData from './RenderSearchData';
 import RenderSinglePlace from './RenderSinglePlace';
 import {Grid, Container, Icon, Loader, Button } from 'semantic-ui-react';
-import { placesSearchQuery, singleSearchQuery, reviewSearchQuery, signOut } from '../actions/APIsearch';
+import { placesSearchQuery, singleSearchQuery, reviewSearchQuery, signOut, addToListQuery, removeFromListQuery } from '../actions/APIsearch';
 
 import { connect } from 'react-redux';
 
@@ -25,6 +25,14 @@ class SearchPage extends Component {
     const reviewUrl = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${code}/reviews`;
     this.props.singleSearchQuery(placeUrl);
     this.props.reviewSearchQuery(reviewUrl).then(() => this.setState({isLoading: false}))
+  }
+
+  handleAddFavorite = (place, reviews) => {
+    this.props.addToListQuery(place, reviews);
+  }
+
+  handleRemoveFromList = place => {
+    this.props.removeFromListQuery(place)
   }
 
   handleLogOut = (event) => {
@@ -77,7 +85,12 @@ class SearchPage extends Component {
               </Grid.Column>
               <Grid.Column width={11}>
                 { !this.state.isLoading &&
-                  <RenderSinglePlace place={myPlace} reviews={reviews} />
+                  <React.Fragment>
+                    <RenderSinglePlace place={myPlace} reviews={reviews} />
+                    {myPlace.isAddedToList ? <Button size='mini' color='teal' onClick={() => this.handleRemoveFromList(myPlace)}>Remove from my list</Button> : 
+                      <Button size='mini' color='teal' onClick={() => this.handleAddFavorite(myPlace, reviews)}>Add to my favorite list</Button>
+                    }
+                  </React.Fragment>
                 }
               </Grid.Column>
             </Grid.Row>
@@ -101,6 +114,8 @@ const mapDispatchToProps = dispatch => {
     placesSearchQuery: url => dispatch(placesSearchQuery(url)),
     singleSearchQuery: url => dispatch(singleSearchQuery(url)),
     reviewSearchQuery: url => dispatch(reviewSearchQuery(url)),
+    addToListQuery: (place, reviews) => dispatch(addToListQuery(place, reviews)),
+    removeFromListQuery: place => dispatch(removeFromListQuery(place)),
     signOut: () => dispatch(signOut())
   }
 }

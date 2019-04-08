@@ -27,6 +27,7 @@ class MySavedPlaces extends Component {
 
   render() {
     const {savedPlaces} = this.props;
+    const {place} = this.state;
 
     const options = savedPlaces.map(place => place = {
       key: place.id,
@@ -51,15 +52,18 @@ class MySavedPlaces extends Component {
               <Grid.Column>
                 <Segment>
                   <Dropdown fluid options={options} search selection onChange={this.handleChange} placeholder='Saved Places'/>
-                  {this.state.place &&
-                    <RenderSinglePlace place={this.state.place} reviews={this.state.place.reviews} />
+                  {place &&
+                    <React.Fragment>
+                      <RenderSinglePlace place={place} reviews={place.reviews} />
+                      <Button size='mini' color='teal' onClick={() => this.handleRemoveFromList(place)}>Remove from my list</Button>
+                      <Link to='/search'><Button size='mini' color='blue'>Continue Searching</Button></Link>
+                      <Link to='/go'><Button size='mini' color='blue'>Add to my Timetable</Button></Link>
+                    </React.Fragment>
                   }
-                  <Link to='/search'><Button size='mini' color='blue'>Continue Searching</Button></Link>
-                  <Link to='/go'><Button size='mini' color='blue'>Add to my Timetable</Button></Link>
                 </Segment>
               </Grid.Column>
               <Grid.Column>
-                {this.state.place &&
+                {place &&
                   <Segment secondary>
           
                   </Segment>
