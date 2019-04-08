@@ -38,7 +38,7 @@ class Timetable extends Component {
 
 const mapStateToProps = state => {
   return {
-    places: state.myList
+    places: state.mySearch.myList
   };
 }
   

@@ -34,51 +34,52 @@ export function reviewSearchQuery(url) {
   }
 }
 
-// export function addToListQuery(id) {
-//   return dispatch => {
-//     dispatch({ type: "ADD_TO_MY_LIST", id });
-
-// }
-
-export function addToListQuery(place) {
+export function addToListQuery(place, reviews) {
   const userID = localStorage.getItem("userID");
-  debugger
+  // debugger
   let newPlace = {
     user_id: userID,
+    code: place.code,
     name: place.name,
     category: place.category,
     contact: place.contact,
     location: place.location,
     rating: place.rating,
-    photos: place.photos
+    photos: place.photos,
+    isAddedToList: true,
+    reviews: reviews
+    // .map(review => review = {
+    //   user_name: review.user.name,
+    //   user_image: review.user.image_url,
+    //   text: review.text,
+    //   time_created: review.time_created,
+    //   rating: parseInt(review.rating)
+    // })
   };
   const url = `${BASEURL}/users/${userID}/places`;
   // body: JSON.stringify(newProject)
   return dispatch => {
-    dispatch({ type: "ADD_TO_MY_LIST", payload: place.id });
+    dispatch({ type: "LOADING_QUERY" });
     return axios.post(url, newPlace)
-      .then(place => console.log("successfully create place and reviews" + place.data))
+      .then(place => dispatch({ type: "ADD_TO_MY_LIST", payload:  place.data}))
       .catch(error => console.log(error));
   }
 }
 
-export function createReviews(reviews) {
-  let sortedReviews = reviews.map(review => review = {
-    user_name: review.user.name,
-    user_image: review.user.image_url,
-    text: review.text,
-    time_created: review.time_created,
-    rating: parseInt(review.rating)
+export function removeFromListQuery(place) {
+  const userID = localStorage.getItem("userID");
+  const url = `${BASEURL}/users/${userID}/places/${place.id}`;
+  // debugger
+  // body: JSON.stringify(newProject)
+  return dispatch => {
+    dispatch({ type: "LOADING_QUERY" });
+    return axios.delete(url)
+      .then(() => dispatch({
+        type: "REMOVE_FROM_MY_LIST",
+        payload: place
+      }))
+      .catch(error => console.log(error));
   }
-  );
-  debugger
-  for (var i = 0; i < sortedReviews.length; i++) {
-    postReview(sortedReviews[i])
-  }
-}
-
-export function removeFromListQuery(id) {
-  return { type: "REMOVE_FROM_MY_LIST", id }
 }
 
 export function getCurrentUser(id) {
@@ -141,33 +142,6 @@ export function getSingleTimetable(id) {
   }
 }
 
-
-export const deleteProject = (projectID) => {
-  const url = `${BASEURL}/projects/${projectID}`;
-  return dispatch => {
-    dispatch({
-      type: "LOADING_QUERY"
-    });
-    return fetch(url, {
-        method: 'DELETE',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          id: projectID
-        })
-      })
-      .then(resp => {
-        dispatch({
-          type: "DELETE_PLACE",
-          projectID: resp.id
-        });
-        // history.push("/projects");
-      });
-  }
-}
-
 export function updateUserAccount(user) {
   const id = localStorage.getItem('userID');
   const url = `${BASEURL}/users/${id}`;
@@ -203,13 +177,13 @@ export function signIn(user) {
     return axios.post(url, user)
       .then(resp => {
           // set userId to localstorage for accessing its projects later
-          localStorage.setItem("userID", parseInt(resp.id));
+          localStorage.setItem("userID", parseInt(resp.data.id));
           // Update redux sore with return data
           dispatch({
             type: 'SIGN_IN',
             payload: resp.data
           });
-          history.push("/search")
+          // history.push("/search")
         }).catch((error) => {
           console.log('error ' + error);
         });
@@ -223,7 +197,7 @@ export function signOut() {
       type: "LOADING_QUERY"
     });
     return axios.post(url)
-      .then(resp => dispatch({
+      .then(() => dispatch({
         type: 'SIGN_OUT'
       }))
   }
@@ -238,7 +212,7 @@ export function register(user) {
     return axios.post(url, user)
       .then(resp => {
           // set userId to localstorage for accessing its projects later
-          localStorage.setItem("userID", parseInt(resp.id));
+          localStorage.setItem("userID", parseInt(resp.data.id));
           // Update redux sore with return data
           dispatch({
             type: 'REGISTER_NEW_USER',
@@ -247,13 +221,4 @@ export function register(user) {
           history.push("/");
         });
   }
-}
-
-
-function postReview(review){
-  const userID = localStorage.getItem('userID');
-  const url = `${BASEURL}/users/${userID}/reviews`;
-  axios.post(url, review)
-  .then(resp => console.log('create review ' + resp.data))
-  .catch(error => console.log(error));
 }

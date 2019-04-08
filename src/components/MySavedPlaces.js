@@ -1,23 +1,44 @@
 import React, { Component } from 'react';
 import logo from '../logo.svg';
 import {Link} from 'react-router-dom';
-import RenderSearchData from './RenderSearchData';
 import RenderSinglePlace from './RenderSinglePlace';
-import {Grid, Container, Button} from 'semantic-ui-react';
+import {Grid, Container, Button, Segment, Dropdown, Header} from 'semantic-ui-react';
+import { getSavedPlaces, getSingleTimetable} from '../actions/APIsearch';
 import { connect } from 'react-redux';
-import { placesSearchQuery, singleSearchQuery, reviewSearchQuery } from '../actions/APIsearch';
 
 
 class MySavedPlaces extends Component {
-  state = { place: null}
+  constructor(){
+    super();
+    this.state = {
+      place: null
+    };
+    this.handleChange = this.handleChange.bind(this)
+  }
 
-  getPlace = (id) => {
-    let place = this.props.places.find(place => place.id === id);
-    this.setState({place: place})
+  componentDidMount(){
+    this.props.getSavedPlaces()
   }
   
+  handleChange = (e, {value}) => {
+    let place = this.props.savedPlaces.find(place => place.id === value);
+    this.setState({place: place})
+  }
+
   render() {
-    const {places} = this.props;
+    const {savedPlaces} = this.props;
+
+    const options = savedPlaces.map(place => place = {
+      key: place.id,
+      text: place.category,
+      value: place.id,
+      content: <Header as='h4' content={place.name} subheader={place.category} />,
+    });
+
+    if (savedPlaces.length === 0) {
+      return null;
+    }
+
     return (
       <React.Fragment>
         <header className="App-header">
@@ -25,18 +46,23 @@ class MySavedPlaces extends Component {
           <span> My Favorite Places! </span>
         </header>
         <Container>
-          <Grid>
-            <Grid.Row>
-              <Grid.Column width={4}>
-                <React.Fragment>
-                  <RenderSearchData handleSearch={this.getPlace} places={places}/>
+          <Grid columns={2} divided>
+            <Grid.Row stretched>
+              <Grid.Column>
+                <Segment>
+                  <Dropdown fluid options={options} search selection onChange={this.handleChange} placeholder='Saved Places'/>
+                  {this.state.place &&
+                    <RenderSinglePlace place={this.state.place} reviews={this.state.place.reviews} />
+                  }
                   <Link to='/search'><Button size='mini' color='blue'>Continue Searching</Button></Link>
                   <Link to='/go'><Button size='mini' color='blue'>Add to my Timetable</Button></Link>
-                </React.Fragment>
+                </Segment>
               </Grid.Column>
-              <Grid.Column width={12}>
+              <Grid.Column>
                 {this.state.place &&
-                  <RenderSinglePlace place={this.state.place} reviews={this.state.place.reviews} />
+                  <Segment secondary>
+          
+                  </Segment>
                 }
               </Grid.Column>
             </Grid.Row>
@@ -49,15 +75,14 @@ class MySavedPlaces extends Component {
 
 const mapStateToProps = state => {
   return {
-    places: state.myList
+    savedPlaces: state.mySearch.myList
   };
 }
   
 const mapDispatchToProps = dispatch => {
   return {
-    placesSearchQuery: url => dispatch(placesSearchQuery(url)),
-    singleSearchQuery: url => dispatch(singleSearchQuery(url)),
-    reviewSearchQuery: url => dispatch(reviewSearchQuery(url))
+    getSavedPlaces:() => dispatch(getSavedPlaces()),
+    getSingleTimetable: id => dispatch(getSingleTimetable(id))
   }
 }
 

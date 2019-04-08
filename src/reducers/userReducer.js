@@ -7,7 +7,6 @@ export default function userReducer(state = defaultState, action) {
         loading: true
       }
     case "SIGN_IN":
-    debugger
       resp = action.payload;
       user = {
         id: resp.id,
@@ -21,7 +20,6 @@ export default function userReducer(state = defaultState, action) {
         error: false,
         loading: false
       }
-      // return {...state, error: false, loading: false}
     case "REGISTER_NEW_USER":
       resp = action.payload;
       user = {
@@ -37,7 +35,6 @@ export default function userReducer(state = defaultState, action) {
         loading: false
       }
     case "GET_CURRENT_USER":
-      // debugger
       resp = action.payload;
       user = {
         id: resp.id,

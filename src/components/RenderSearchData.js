@@ -12,7 +12,7 @@ class RenderSearchData extends Component {
       <Segment className='listPlaces'>
         <List divided animated verticalAlign='middle'>
           {places.map(place => 
-            <List.Item key={place.id} onClick={() => this.handleClick(place.id)}>
+            <List.Item key={place.code} onClick={() => this.handleClick(place.code)}>
               {place.isAddedToList ? <List.Icon name='heart' color='pink' verticalAlign='middle' /> : <List.Icon name='heart outline' verticalAlign='middle' />}
               <List.Content>
                 <Header as='h4' color='blue'>{place.category}</Header>

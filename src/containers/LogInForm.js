@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {Form} from 'semantic-ui-react';
 import {signIn} from '../actions/APIsearch';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
+import history from '../components/history';
 
 class LogInForm extends Component {
   constructor () {
@@ -20,7 +21,8 @@ class LogInForm extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    this.props.signIn(this.state)
+    debugger
+    this.props.signIn(this.state).then(() => history.push('/search'))
   }
 
   render() {

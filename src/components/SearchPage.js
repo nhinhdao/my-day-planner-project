@@ -20,9 +20,9 @@ class SearchPage extends Component {
     this.props.placesSearchQuery(url).then(() => this.setState({loadData: false}))
   }
 
-  handleSearchPlace = (id) => {
-    const placeUrl = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${id}`
-    const reviewUrl = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${id}/reviews`;
+  handleSearchPlace = (code) => {
+    const placeUrl = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${code}`
+    const reviewUrl = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${code}/reviews`;
     this.props.singleSearchQuery(placeUrl);
     this.props.reviewSearchQuery(reviewUrl).then(() => this.setState({isLoading: false}))
   }
@@ -38,7 +38,15 @@ class SearchPage extends Component {
     if (!localStorage.getItem("userID")){
       this.props.history.push("/")
     }
-    const {places} = this.props
+    const {places, myPlace} = this.props;
+    const reviews = this.props.reviews.map(review => review = {
+      id: review.id,
+      user_name: review.user.name,
+      user_image: review.user.image_url,
+      text: review.text,
+      time_created: review.time_created,
+      rating: review.rating
+    })
     return (
       <React.Fragment>
         <header className="App-header">
@@ -69,7 +77,7 @@ class SearchPage extends Component {
               </Grid.Column>
               <Grid.Column width={11}>
                 { !this.state.isLoading &&
-                  <RenderSinglePlace place={this.props.myPlace} reviews={this.props.reviews} />
+                  <RenderSinglePlace place={myPlace} reviews={reviews} />
                 }
               </Grid.Column>
             </Grid.Row>
@@ -82,9 +90,9 @@ class SearchPage extends Component {
 
 const mapStateToProps = state => {
   return {
-    places: state.places,
-    myPlace: state.singlePlace,
-    reviews: state.reviews
+    places: state.mySearch.places,
+    myPlace: state.mySearch.singlePlace,
+    reviews: state.mySearch.reviews
   };
 }
   

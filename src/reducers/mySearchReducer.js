@@ -1,15 +1,29 @@
-export default function mySearchReducer(state = { places: [], myList: [], singlePlace: {}, reviews: [], loading: false }, action) {
-  let places, singlePlace, data, lists;
+export default function mySearchReducer(state = defaultState, action) {
+  let places, singlePlace, data;
   switch (action.type) {
     case 'LOADING_QUERY':
-      return { ...state, loading: true}
+      return {
+        ...state,
+        loading: true
+      }
     case 'FETCH_PLACES_SEARCH_QUERY':
-      data = action.payload.map(data => data = { id: data.id, name: data.name, category: data.categories[0] ? data.categories[0].title : 'N/A', image: data.image_url, isAddedToList: false});
-      return { ...state, places: data, loading: false };
+      data = action.payload.map(data => data = {
+        id: null,
+        code: data.id,
+        name: data.name,
+        category: data.categories[0] ? data.categories[0].title : 'N/A',
+        isAddedToList: false
+      });
+      return {
+        ...state,
+        places: data,
+        loading: false
+      };
     case 'FETCH_SINGLE_SEARCH_QUERY':
       data = action.payload;
       let searchItem = {
-        id: data.id,
+        id: null,
+        code: data.id,
         name: data.name,
         contact: data.display_phone,
         category: data.categories[0].title,
@@ -19,25 +33,71 @@ export default function mySearchReducer(state = { places: [], myList: [], single
         isAddedToList: false,
         reviews: []
       }
-      return { ...state, singlePlace: searchItem, loading: false };
+      return {
+        ...state,
+        singlePlace: searchItem,
+        loading: false
+      };
     case 'ADD_TO_MY_LIST':
       places = [...state.places.map(place => {
-        if (place.id !== action.id) { return place }
-        return { ...place, isAddedToList: true }
+        if (place.code !== action.payload.code) {
+          return place
+        }
+        return {
+          ...place,
+          isAddedToList: true
+        }
       })];
-      singlePlace = { ...state.singlePlace, isAddedToList: true, reviews: [...state.reviews] };
-      lists = state.myList.filter(place => place.id !== singlePlace.id);
-      return { ...state, places: places, singlePlace: singlePlace, myList: [...lists, singlePlace] };
+      singlePlace = {
+        ...action.payload
+      };
+      return {
+        ...state,
+        places: places,
+        singlePlace: singlePlace,
+        loading: false
+      };
     case 'REMOVE_FROM_MY_LIST':
       places = [...state.places.map(place => {
-        if (place.id !== action.id) { return place }
-        return { ...place, isAddedToList: false }
+        if (place.code !== action.payload.code) {
+          return place
+        }
+        return {
+          ...place,
+          isAddedToList: false
+        }
       })];
-      singlePlace = { ...state.singlePlace, isAddedToList: false };
-      return { ...state, places: places, singlePlace: singlePlace, myList: state.myList.filter(place => place.id !== action.id)};
+      singlePlace = {
+        ...state.singlePlace,
+        isAddedToList: false
+      };
+      return {
+        ...state,
+        places: places,
+        singlePlace: singlePlace,
+        loading: false
+      };
+    case 'GET_SAVED_PLACES':
+      return {
+        ...state,
+        myList: action.payload,
+        loading: false
+      };
     case "FETCH_REVIEW_SEARCH_QUERY":
-      return { ...state, loading: false, reviews: action.payload }
+      return {
+        ...state,
+        loading: false,
+        reviews: action.payload
+      }
     default:
       return state;
   }
+}
+
+const defaultState = {
+  places: [],
+  singlePlace: {},
+  myList: [],
+  reviews: [],
+  loading: false
 }

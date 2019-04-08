@@ -10,9 +10,9 @@ class RenderReviews extends Component {
         </Header>
         {this.props.reviews.map(review => 
           <Comment key={review.id}>
-            { review.user.image_url ? <Comment.Avatar src={review.user.image_url} /> : <Comment.Avatar src='https://i.imgur.com/MhN5kCx.jpg' />}
+            { review.user_image ? <Comment.Avatar src={review.user_image} /> : <Comment.Avatar src='https://i.imgur.com/MhN5kCx.jpg' />}
             <Comment.Content>
-              <Comment.Author as='a'>{review.user.name}</Comment.Author>
+              <Comment.Author as='a'>{review.user_name}</Comment.Author>
               <Comment.Metadata>
                 <div>{review.time_created.split(" ")[0]}</div>
               </Comment.Metadata>

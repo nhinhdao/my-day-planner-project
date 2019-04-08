@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
-import { reviewSearchQuery, addToListQuery, removeFromListQuery, createReviews } from '../actions/APIsearch';
+import { reviewSearchQuery, addToListQuery, removeFromListQuery} from '../actions/APIsearch';
 import { connect } from 'react-redux';
 import RenderReviews from './RenderReviews';
 import { Segment, List, Header, Button, Rating } from 'semantic-ui-react'
@@ -10,8 +10,7 @@ class RenderSinglePlace extends Component {
   state = { place: {}, reviews: []}
 
   handleAddFavorite = (place, reviews) => {
-    this.props.addToListQuery(place);
-    this.props.createReviews(reviews);
+    this.props.addToListQuery(place, reviews);
   }
 
   handleRemoveFromList = place => {
@@ -49,20 +48,12 @@ class RenderSinglePlace extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    reviews: state.reviews,
-    myList: state.myList
-  }
-}
-
 const mapDispatchToProps = dispatch => {
   return {
     reviewSearchQuery: url => dispatch(reviewSearchQuery(url)),
-    addToListQuery: id => dispatch(addToListQuery(id)),
-    createReviews: reviews => dispatch(createReviews(reviews)),
-    removeFromListQuery: id => dispatch(removeFromListQuery(id))
+    addToListQuery: (place, reviews) => dispatch(addToListQuery(place, reviews)),
+    removeFromListQuery: place => dispatch(removeFromListQuery(place))
   }
 }
         
-export default connect(mapStateToProps, mapDispatchToProps)(RenderSinglePlace);
+export default connect(null, mapDispatchToProps)(RenderSinglePlace);
