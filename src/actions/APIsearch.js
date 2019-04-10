@@ -48,13 +48,6 @@ export function addToListQuery(place, reviews) {
     photos: place.photos,
     isAddedToList: true,
     reviews: reviews
-    // .map(review => review = {
-    //   user_name: review.user.name,
-    //   user_image: review.user.image_url,
-    //   text: review.text,
-    //   time_created: review.time_created,
-    //   rating: parseInt(review.rating)
-    // })
   };
   const url = `${BASEURL}/users/${userID}/places`;
   // body: JSON.stringify(newProject)
@@ -124,6 +117,18 @@ export function getAllTimetables() {
         type: 'GET_ALL_TIMETABLES',
         payload: resp.data
       }));
+  }
+}
+
+export function createNewTimetable(name) {
+  const userID = localStorage.getItem("userID");
+  const url = `${BASEURL}/users/${userID}/timetables`;
+  // body: JSON.stringify(newProject)
+  return dispatch => {
+    dispatch({ type: "LOADING_QUERY" });
+    return axios.post(url, {name: name, user_id: userID})
+      .then(place => dispatch({ type: "CREATE_NEW_TIMETABLE", payload:  place.data}))
+      .catch(error => console.log(error));
   }
 }
 

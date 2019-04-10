@@ -1,59 +1,36 @@
+const options = savedPlaces.map(place => place = {key: place.id, description: place.category, text: place.name, value: place.id});
 
-<List animated verticalAlign='middle'>
-  <List.Item>
-    <List.Icon name='star outline' size='large' verticalAlign='middle' />
-    <List.Content>
-      <List.Header as='a'>Aquarium</List.Header>
-      <List.Description as='a'>West New York Aquarium</List.Description>
-    </List.Content>
-  </List.Item>
-</List>
+<Grid columns={2} divided>
+  <Grid.Row stretched>
+    <Grid.Column>
+      <Segment>
+        <RenderSearchData handleSearch={this.getPlace} places={savedPlaces}/>
+        <Dropdown
+          button
+          className='icon'
+          floating
+          labeled
+          icon='location arrow'
+          options={options}
+          search
+          onChange={this.handleChange}
+          text='Saved Places'
+        />
+        {this.state.place &&
+          <RenderSinglePlace place={this.state.place} reviews={this.state.place.reviews} />
+        }
+        <Link to='/search'><Button size='mini' color='blue'>Continue Searching</Button></Link>
+        <Link to='/go'><Button size='mini' color='blue'>Add to my Timetable</Button></Link>
+      </Segment>
+    </Grid.Column>
+    <Grid.Column>
+      {project &&
+        <Segment secondary>
+          
+        </Segment>
+      }
+    </Grid.Column>
+  </Grid.Row>
+</Grid>
 
-import { Tab, Header, Icon, List } from 'semantic-ui-react'
-
-const panes = [
-  {},
-  { menuItem: (
-    <List.Item>
-        <List.Content>
-          <Header as='h4' color='blue'><Icon name='heart' color='pink'/>Museum</Header>
-          <List.Description>Central Park, New York</List.Description>
-        </List.Content>
-      </List.Item>
-    ) },
-  { menuItem: (
-    <List.Item>
-        <List.Content>
-          <Header as='h4' color='blue'><Icon name='heart' color='pink'/>Museum</Header>
-          <List.Description>Central Park, New York</List.Description>
-        </List.Content>
-      </List.Item>
-    ) },
-  { menuItem: (
-    <List.Item>
-        <List.Content>
-          <Header as='h4' color='blue'><Icon name='heart' color='pink'/>Museum</Header>
-          <List.Description>Central Park, New York</List.Description>
-        </List.Content>
-      </List.Item>
-    ) },
-]
-
-const TabExampleVerticalTabular = () => (
-  <Tab menu={{ fluid: true, vertical: true, tabular: true }} panes={panes} />
-)
-
-const panes = [];
-this.props.places.forEach(place => {
-  panes.push({menuItem: (
-  <List.Item onClick={() => this.handleClick(place.id)}>
-    <List.Content>
-      <Header as='h4' color='blue'>{place.isAddedToList ? <Icon name='heart' color='pink'/> : <Icon name='heart outline'/>}{place.category}</Header>
-      <List.Description>{place.name}</List.Description>
-    </List.Content>
-  </List.Item>
-  )})
-});
-return (
-<Tab menu={{ fluid: true, vertical: true, tabular: 'left' }} panes={panes} />
-)
+date.strftime('%FT%R')
