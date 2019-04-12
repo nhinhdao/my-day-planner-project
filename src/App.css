@@ -111,7 +111,7 @@ div.ui.comments{
   color: blue;
 }
 
-/* div#myPage{
-  width: 70%;
-  padding-left: 200px;
-} */
+div#myPage img{
+  max-width: 200px;
+  max-height: 200px;
+}

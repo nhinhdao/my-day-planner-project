@@ -150,20 +150,12 @@ export function updateUserAccount(user) {
     dispatch({
       type: "LOADING_QUERY"
     });
-    return fetch(url, {
-        method: 'PATCH',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user)
-      })
+    return axios.patch(url, user)
       .then(resp => {
-        localStorage.setItem("userImage", resp.image);
-        localStorage.setItem("userUsername", resp.username);
-        dispatch({
+          localStorage.setItem("userID", parseInt(resp.data.id));
+          dispatch({
           type: "UPDATE_USER_ACCOUNT",
-          resp
+          payload: resp.data
         });
       })
   }
@@ -223,18 +215,3 @@ export function register(user) {
         });
   }
 }
-
-
-// // debugger
-// let newPlace = {
-//   user_id: userID,
-//   code: place.code,
-//   name: place.name,
-//   category: place.category,
-//   contact: place.contact,
-//   location: place.location,
-//   rating: place.rating,
-//   photos: place.photos,
-//   isAddedToList: true,
-//   reviews: reviews
-// };
