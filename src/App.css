@@ -1,10 +1,19 @@
 div.ui.container{
-  width: 85%
+  width: 95%
 }
 
 .ui.form .fields{
   justify-content: center;
 }
+
+.ui.form .equal.width.fields{
+  margin: 0;
+}
+
+.center.aligned.row.searchPage{
+  padding-bottom: 0;
+}
+
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 40px;
@@ -60,31 +69,44 @@ img.iconImage {
 }
 
 .carouselImages{
-  max-width: 50%;
+  max-width: 60%;
+  /* max-height: 50%; */
   margin: auto;
-  text-align: center
+  text-align: center;
+  vertical-align: middle;
 }
 
-/* .side-crop { max-height: 350px; overflow: hidden;}
-.side-crop img { max-height: initial; } */
+.side-crop { max-height: 270px; overflow: hidden;}
+.side-crop img { max-height: initial; }
+/* .side-crop img { height: 200px; width: 200px; } 
 
-.carousel .thumb img {
+/* .carousel .thumb img {
   width: 100% !important;
   height: 100% !important;
-}
+} */
 
-.carousel .slide img {
-  max-height: 300px;
-  max-width: 450px;
+/* .carousel .slide img {
+  max-height: 250px;
+  max-width: 300px;
   /* change this to whatever you want */
-  width: auto;
-}
+  /* width: auto; */
+
 
 div.ui.comments{
   max-width: 100%;
 }
 
-div.ui.segment.listPlaces{
+/* div.ui.segment.listPlaces{
   height: 80%;
   overflow-y: scroll;
+} */
+
+/* visited link */
+#listData a:visited {
+  color: green;
+}
+
+/* selected link */
+#listData a:active {
+  color: blue;
 }

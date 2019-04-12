@@ -13,13 +13,15 @@ import TimelineItem from './TimelineItem';
  */
 function getFormattedData(items) {
   const activities = {};
-  items.forEach(({ts, text}, index) => {
+  items.forEach(({ts, text, place}, index) => {
     const date = moment(ts);
     const dateStr = date.format('DD MMM YYYY');
     const list = activities[dateStr] || [];
     list.push({
       time: date.format('h:mm a'),
       text,
+      date: ts,
+      place,
       key: index,
     });
     activities[dateStr] = list;
@@ -27,7 +29,7 @@ function getFormattedData(items) {
   return activities;
 }
 
-function Timeline({items}) {
+function Timeline({items, timetableID, updatePlace, handleDelete}) {
   const activities = getFormattedData(items);
   const dates = Object.keys(activities);
   return (
@@ -39,8 +41,17 @@ function Timeline({items}) {
               {d}
             </span>
           </li>
-          {activities[d].map(({time, text, key}) =>
-            <TimelineItem time={time} text={text} key={key} />,
+          {activities[d].map(({time, text, date, place, key}) =>
+            <TimelineItem 
+             updatePlace={updatePlace} 
+             handleDelete={handleDelete}
+             date={date} 
+             time={time} 
+             text={text} 
+             timetableID={timetableID} 
+             place={place} 
+             key={key} 
+             />,
           )}
         </ul>,
       )}

@@ -3,6 +3,7 @@ import LogInForm from '../containers/LogInForm';
 import SignUpForm from '../containers/SignUpForm';
 import {Button, Image, Grid, Header} from 'semantic-ui-react';
 import {connect} from 'react-redux';
+import {Redirect} from 'react-router-dom';
 
 class WelcomePage extends Component {
   state = {
@@ -20,6 +21,9 @@ class WelcomePage extends Component {
   }
 
   render() {
+    if (localStorage.getItem("userID")) {
+      return <Redirect to='/'/>;
+    }
     return (
       <Grid centered>
         <Grid.Row></Grid.Row><Grid.Row></Grid.Row>

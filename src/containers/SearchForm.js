@@ -23,7 +23,7 @@ class SearchForm extends Component {
     event.preventDefault();
     this.props.toggleLoading();
     this.search();
-    this.setState({searchQuery: '', location: ''})
+    this.setState({searchQuery: ''})
   }
 
   render() {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Dropdown, Label, Icon, Segment} from 'semantic-ui-react';
+import {Dropdown, Label, Icon} from 'semantic-ui-react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -8,10 +8,7 @@ class AddToTimeTable extends Component {
     super(props);
     this.state = { 
       options: props.timetables,
-      timetable: {
-        name: '',
-        time: new Date()
-      },
+      time: new Date()
     };
     this.handleChangeTime = this.handleChangeTime.bind(this);
     this.handleAddition = this.handleAddition.bind(this)
@@ -19,7 +16,6 @@ class AddToTimeTable extends Component {
 
   async handleAddition(e, { value }){
     await this.setState({
-      ...this.state,
       options: [{ key: value, text: value, value }, ...this.state.options],
     });
     this.props.handleChange(value)
@@ -30,20 +26,18 @@ class AddToTimeTable extends Component {
   }
 
   handleChangeTime(date) {
-    debugger
     this.setState({
-      ...this.state,
-      timetable: {
-        ...this.state.timetable,
-        time: date
-      }
+      time: date
     });
   }
 
+  handleAddPlace = () => {
+    this.props.addPlace(this.state.time)
+  }
+
   render() {
-    console.log(this.state);
     return (
-      <Segment basic>
+      <React.Fragment>
         <Dropdown
           options={this.state.options}
           placeholder='Choose or create a timetable'
@@ -54,9 +48,10 @@ class AddToTimeTable extends Component {
           additionLabel={<span style={{ color: 'red' }}>Add:  </span>}
           onAddItem={this.handleAddition}
           onChange={this.handleChange}
+          defaultValue={this.props.defaultValue ? this.props.defaultValue.name : null}
         />
         <DatePicker
-            selected={this.state.timetable.time}
+            selected={this.state.time}
             onChange={this.handleChangeTime}
             showTimeSelect
             timeFormat="h:mm aa"
@@ -64,8 +59,8 @@ class AddToTimeTable extends Component {
             dateFormat="MMMM d, yyyy h:mm aa"
             timeCaption="Time"
         />
-        <Label onClick={this.handleAddTask} color='red' tag><Icon name="plus"/>Add</Label>
-      </Segment>
+        <Label onClick={this.handleAddPlace} color='red'><Icon name="plus"/>Add</Label>
+      </React.Fragment>
     )
   }
 }

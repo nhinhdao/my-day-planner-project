@@ -34,26 +34,13 @@ export function reviewSearchQuery(url) {
   }
 }
 
-export function addToListQuery(place, reviews) {
-  const userID = localStorage.getItem("userID");
+export function addToListQuery(place) {
   // debugger
-  let newPlace = {
-    user_id: userID,
-    code: place.code,
-    name: place.name,
-    category: place.category,
-    contact: place.contact,
-    location: place.location,
-    rating: place.rating,
-    photos: place.photos,
-    isAddedToList: true,
-    reviews: reviews
-  };
+  const userID = localStorage.getItem("userID");
   const url = `${BASEURL}/users/${userID}/places`;
-  // body: JSON.stringify(newProject)
   return dispatch => {
     dispatch({ type: "LOADING_QUERY" });
-    return axios.post(url, newPlace)
+    return axios.post(url, place)
       .then(place => dispatch({ type: "ADD_TO_MY_LIST", payload:  place.data}))
       .catch(error => console.log(error));
   }
@@ -62,8 +49,6 @@ export function addToListQuery(place, reviews) {
 export function removeFromListQuery(place) {
   const userID = localStorage.getItem("userID");
   const url = `${BASEURL}/users/${userID}/places/${place.id}`;
-  // debugger
-  // body: JSON.stringify(newProject)
   return dispatch => {
     dispatch({ type: "LOADING_QUERY" });
     return axios.delete(url)
@@ -102,6 +87,17 @@ export function getSavedPlaces() {
         type: 'GET_SAVED_PLACES',
         payload: resp.data
       }));
+  }
+}
+
+export function updatePlace(place) {
+  const userID = localStorage.getItem("userID");
+  const url = `${BASEURL}/users/${userID}/places/${place.id}`;
+  return dispatch => {
+    dispatch({ type: "LOADING_QUERY" });
+    return axios.patch(url, place)
+      .then(place => dispatch({ type: "UPDATE_PLACE", payload:  place.data}))
+      .catch(error => console.log(error));
   }
 }
 
@@ -188,7 +184,7 @@ export function signIn(user) {
             type: 'SIGN_IN',
             payload: resp.data
           });
-          // history.push("/search")
+          history.push("/")
         }).catch((error) => {
           console.log('error ' + error);
         });
@@ -227,3 +223,18 @@ export function register(user) {
         });
   }
 }
+
+
+// // debugger
+// let newPlace = {
+//   user_id: userID,
+//   code: place.code,
+//   name: place.name,
+//   category: place.category,
+//   contact: place.contact,
+//   location: place.location,
+//   rating: place.rating,
+//   photos: place.photos,
+//   isAddedToList: true,
+//   reviews: reviews
+// };

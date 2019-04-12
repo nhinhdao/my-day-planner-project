@@ -21,8 +21,7 @@ class LogInForm extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    debugger
-    this.props.signIn(this.state).then(() => history.push('/search'))
+    this.props.signIn(this.state).then(() => history.push('/'))
   }
 
   render() {

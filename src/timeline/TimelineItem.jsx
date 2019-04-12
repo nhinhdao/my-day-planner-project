@@ -1,55 +1,92 @@
-import React from 'react';
+import React, { Component }  from 'react';
 import PropTypes from 'prop-types';
-import { Popup, Rating, Image} from 'semantic-ui-react'
-/**
- * @usage 
- * <TimelineItem time={time} text={text} />
- */
-// const PopupExampleHtml = () => (
-//   <Popup trigger={TimelineItem}>
-//     <Popup.Header>User Rating</Popup.Header>
-//     <Popup.Content>
-//       <Rating icon='star' defaultRating={3} maxRating={4} />
-//       <Image src='https://i.imgur.com/Zl5AgOH.jpg' />
-//       <p>
-//       Two sisters move to the country with their father in order to be closer to their
-//         hospitalized mother, and discover the surrounding trees are inhabited by magical spirits.
-//       </p>
-//     </Popup.Content>
-//   </Popup>
-// )
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { connect } from 'react-redux';
+import { Popup, Rating, Image, Icon, Label, List} from 'semantic-ui-react';
+import { removeFromListQuery } from '../actions/APIsearch';
 
-function TimelineItem({time, text}) {
-  return (
-    <li>
-      <i className="fa" />
-      <div className="time-line-item">
-        <span className="time">
-          <i className="fa fa-clock-o" /> {time}
-        </span>
-        <div className="time-line-header">
-          <Popup
-            trigger={<span>{text}</span>}
+class TimelineItem extends Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      time: new Date(props.date),
+    };
+    this.handleUpdatePlace = this.handleUpdatePlace.bind(this);
+    this.handleChangeTime = this.handleChangeTime.bind(this)
+  }
+  
+  handleChangeTime(date) {
+    this.setState({
+      time: date
+    });
+  }
+
+  handleUpdatePlace = () => {
+    // debugger
+    let place = {id: this.props.place.id, timetable_id: this.props.timetableId, time: this.state.time};
+    this.props.updatePlace(place)
+  }
+
+  handleRemoveFromList = place => {
+    this.props.removeFromListQuery(place)
+  }
+
+  render() {
+    const {time, text, place} = this.props
+    return (
+      <li>
+        <i className="fa" />
+        <div className="time-line-item">
+          <span className="time">
+            <i className="fa fa-clock-o" /> {time}{" | "}
+            <Popup
+            trigger={<Icon name='edit'color='blue' />}
             content={
-              <React.Fragment>
-                <Popup.Header>User Rating</Popup.Header>
-                <Popup.Content>
-                  <Rating icon='star' defaultRating={3} maxRating={4} />
-                  <Image src='https://i.imgur.com/Zl5AgOH.jpg' />
-                  <p>
-                  Two sisters move to the country with their father in order to be closer to their
-                    hospitalized mother, and discover the surrounding trees are inhabited by magical spirits.
-                  </p>
-                </Popup.Content>
-              </React.Fragment>
+              <div>
+                <DatePicker
+                selected={this.state.time}
+                onChange={this.handleChangeTime}
+                showTimeSelect
+                timeFormat="h:mm aa"
+                timeIntervals={15}
+                dateFormat="MMMM d, yyyy h:mm aa"
+                timeCaption="Time"
+                />
+                <Label onClick={this.handleUpdatePlace} color='green' size='tiny'>Update</Label>
+              </div>
             }
             on='click'
             position='top right'
-          />
+          />{"|"}<Icon name='delete' color='red' onClick={() => this.props.handleDelete(place)}/>
+          </span>
+          <div className="time-line-header">
+            <Popup
+              trigger={<span>{text}</span>}
+              content={
+                <React.Fragment>
+                  <Popup.Header>{place.name}</Popup.Header>
+                  <Popup.Content>
+                    <Image src={place.photos[0]} />
+                    <List>
+                      <List.Item>
+                        <List.Icon name='heart' />
+                        <List.Content><Rating icon='star' defaultRating={parseInt(place.rating)} maxRating={5} size='small' disabled/></List.Content>
+                      </List.Item>
+                      <List.Item icon='map signs' content={place.location} />
+                      <List.Item icon='phone' content={place.contact} />
+                    </List>
+                  </Popup.Content>
+                </React.Fragment>
+              }
+              on='click'
+              position='bottom right'
+            />
+          </div>
         </div>
-      </div>
-    </li>
-  );
+      </li>
+    )
+  };
 }
 
 TimelineItem.defaultProps = {};
@@ -59,4 +96,11 @@ TimelineItem.propTypes = {
   text: PropTypes.string.isRequired,
 };
 
-export default TimelineItem;
+const mapDispatchToProps = dispatch => {
+  return {
+    removeFromListQuery: place => dispatch(removeFromListQuery(place))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(TimelineItem);
+// export default TimelineItem;

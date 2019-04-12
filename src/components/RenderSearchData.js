@@ -10,9 +10,9 @@ class RenderSearchData extends Component {
     const { places } = this.props;
     return (
       <Segment className='listPlaces'>
-        <List divided animated verticalAlign='middle'>
+        <List divided animated verticalAlign='middle' id='listData'>
           {places.map(place => 
-            <List.Item key={place.code} onClick={() => this.handleClick(place.code)}>
+            <List.Item key={place.code} onClick={() => this.handleClick(place.code)} as='a'>
               {place.isAddedToList ? <List.Icon name='heart' color='pink' verticalAlign='middle' /> : <List.Icon name='heart outline' verticalAlign='middle' />}
               <List.Content>
                 <Header as='h4' color='blue'>{place.category}</Header>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import RenderReviews from './RenderReviews';
-import { Segment, List, Header, Rating } from 'semantic-ui-react'
+import { List, Header, Rating } from 'semantic-ui-react'
 
 class RenderSinglePlace extends Component {
   state = { place: {}, reviews: []}
@@ -16,9 +16,9 @@ class RenderSinglePlace extends Component {
       </Carousel> : "No Images Available";
     
     return (
-      <Segment>
+      <React.Fragment>
+        <Header textAlign='center'>{place.name}</Header>
         <div className='carouselImages'>
-        <Header>{place.name}</Header>
         {imageList}
         </div>
           <List>
@@ -30,8 +30,7 @@ class RenderSinglePlace extends Component {
             <List.Item icon='phone' content={place.contact} />
           </List>
         <RenderReviews reviews={reviews} />
-        
-      </Segment>
+      </React.Fragment>
     )
   }
 }

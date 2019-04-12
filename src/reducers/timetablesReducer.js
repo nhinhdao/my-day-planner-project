@@ -23,7 +23,7 @@ export default function timetableReducer(state = defaultState, action) {
         loading: false
       }
     case "CREATE_NEW_TIMETABLE":
-    debugger
+    // debugger
       resp = action.payload;
       return {
         ...state,

@@ -77,6 +77,13 @@ export default function mySearchReducer(state = defaultState, action) {
         singlePlace: singlePlace,
         loading: false
       };
+    case 'UPDATE_PLACE':
+      data = action.payload;
+      return {
+        ...state,
+        singlePlace: data,
+        loading: false
+      };
     case 'GET_SAVED_PLACES':
       return {
         ...state,
