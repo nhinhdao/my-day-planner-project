@@ -7,7 +7,6 @@ import rootReducer from './reducers/index';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import * as serviceWorker from './serviceWorker';
-import 'bootstrap/dist/css/bootstrap.css';
 import 'semantic-ui-css/semantic.min.css';
 require('dotenv').config();
 

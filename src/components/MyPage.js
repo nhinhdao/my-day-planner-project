@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import {Container, Grid, Segment, Header, Label, Button, Form, Image, Card} from 'semantic-ui-react';
+import {Grid, Segment, Header, Tab, Button, Form, Image} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {updateUserAccount, getCurrentUser } from '../actions/APIsearch';
+import Timetable from './Timetable';
 
 
 class MyPage extends Component {
@@ -16,6 +17,7 @@ class MyPage extends Component {
         image: ''
       },
       updateAccount: false,
+      showTimetable: true,
       errors: false
     };
     this.handleClick=this.handleClick.bind(this);
@@ -44,6 +46,7 @@ class MyPage extends Component {
         image: user.image,
       },
       updateAccount: false,
+      showTimetable: true,
       errors: false
     };
   }
@@ -53,7 +56,7 @@ class MyPage extends Component {
   }
 
   handleClick(){
-    this.setState({updateAccount: true, errors: false})
+    this.setState({updateAccount: true, showTimetable: false, errors: false})
   }
 
   handleUpdateInformation(event){
@@ -66,77 +69,66 @@ class MyPage extends Component {
     event.preventDefault();
     if (this.state.user.password && this.state.user.password === this.state.user.password_confirmation) {
       this.props.updateUserAccount(this.state.user)
-      this.setState({...this.state, updateAccount: false, errors: false})
+      this.setState({...this.state, updateAccount: false, showTimetable: true, errors: false})
     }
     else {this.setState({errors : true})}
   }
 
   render() {
     const {user} = this.state;
+    const panes = this.props.timetables.map(timetable => timetable = 
+      { menuItem: timetable.name, pane: (<Tab.Pane key={timetable.id}><Timetable timetable={timetable}/></Tab.Pane> )}
+    )
     return (
-      <Container text>
-      <Segment>
-        <Grid columns={2} divided>
-          <Grid.Row stretched>
-            <Grid.Column>
-              <Segment raised>
-                <Header as='h1' color='blue'>My Page</Header>
-                <hr/>
-                <Label color='red' ribbon>Overview</Label>
-                <span>Account Details</span>
-                <Image src={this.props.user.image}/>
-                <Segment color='blue'>
-                  <Header as='h4' color='blue'>{this.props.user.username}</Header>
-                  <p><strong>{this.props.user.email}</strong></p>
-                </Segment>
-                <Button onClick={this.handleClick}>Update Account</Button>
-              </Segment>
-            </Grid.Column>
-          { this.state.updateAccount &&
-            <Grid.Column>
-              <Form onSubmit={this.handleSubmit}>
-                <hr/>
-                <Form.Group widths='equal'>
-                  <Form.Input label='Username' name='username' value={user.username} placeholder={this.props.user.username} onChange={this.handleUpdateInformation} />
-                  <Form.Input label='Email' name='email' value={user.email} placeholder={this.props.user.email} onChange={this.handleUpdateInformation} />
-                </Form.Group>
-                <Form.Group widths='equal'>
-                  <Form.Input label='Password' type='password' name='password' placeholder='Password' value={user.password} onChange={this.handleUpdateInformation} required/>
-                  <Form.Input label='Password Confirmation' type='password' name='password_confirmation' value={user.password_confirmation} placeholder='Password Confirmation' onChange={this.handleUpdateInformation} required/>
-                </Form.Group>
-                {this.state.errors && <Header as='h5' color='red'>Passwords do not match/present. Please try again!</Header>}
-                <Form.Input label='Link to your profile picture' name='image' placeholder='Picture of size 200x200 if possible' onChange={this.handleUpdateInformation}/>
-                <Button type='submit' color='blue'>Update</Button><Button type='button' onClick={this.handleCancel}>Cancel</Button>
-              </Form>
-            </Grid.Column>
-          }
-        </Grid.Row>
+      <div id='myPage'>
+      <br/>
+        <Image src={user.image} size='small' circular centered bordered/>
+        <Header as='h2' textAlign='center'>
+          <Header.Content>{user.username}</Header.Content>
+          <Header.Subheader>{user.email}</Header.Subheader>
+          <Button color='teal' size='mini' onClick={this.handleClick}>Update Account</Button>
+        </Header>
+      <br/>
+        <Grid>
         <Grid.Row>
-          <Grid.Column>
-            <Segment >
-              <Header as='h1' color='blue'>Timetables</Header>
-              <hr/><br/>
-              <Card.Group>
-                <Card>
-                  <Card.Content
-                    header='Elliot Baker'
-                    meta='Friend'
-                  />
-                </Card>
-              </Card.Group>
+          <Grid.Column width={2}></Grid.Column>
+          <Grid.Column width={12}>
+          {this.state.updateAccount &&
+            <Segment color='blue'>
+            <Form onSubmit={this.handleSubmit}>
+              <Form.Group widths='equal'>
+                <Form.Input label='Username' name='username' value={user.username} placeholder={this.props.user.username} onChange={this.handleUpdateInformation} />
+                <Form.Input label='Email' name='email' value={user.email} placeholder={this.props.user.email} onChange={this.handleUpdateInformation} />
+                <Form.Input label='Link to your profile picture' name='image' placeholder='Picture of size 200x200 if possible' onChange={this.handleUpdateInformation}/>
+              </Form.Group>
+              <Form.Group widths='equal'>
+                <Form.Input label='Password' type='password' name='password' placeholder='Password' value={user.password} onChange={this.handleUpdateInformation} required/>
+                <Form.Input label='Password Confirmation' type='password' name='password_confirmation' value={user.password_confirmation} placeholder='Password Confirmation' onChange={this.handleUpdateInformation} required/>
+              </Form.Group>
+              {this.state.errors && <Header as='h5' color='red'>Passwords do not match/present. Please try again!</Header>}
+              <Button type='submit' color='blue'>Update</Button><Button type='button' onClick={this.handleCancel}>Cancel</Button>
+            </Form>
             </Segment>
+          }
+          {this.state.showTimetable &&
+            <Segment>
+              <Header as='h1' color='blue'>Timetables</Header>
+              <Tab menu={{ fluid: true, vertical: true, tabular: true }} panes={panes}  renderActiveOnly={false}/>
+            </Segment>
+          }
           </Grid.Column>
+          <Grid.Column width={2}></Grid.Column>
         </Grid.Row>
       </Grid>
-      </Segment>
-    </Container>
+    </div>
     )
   }
 }
 
 const mapStateToProps = state => {
   return {
-    user: state.current_user.user
+    user: state.currentUser.user,
+    timetables: state.timetables.all
   }
 }
 
