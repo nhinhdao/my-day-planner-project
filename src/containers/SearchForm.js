@@ -1,18 +1,26 @@
 import React, { Component } from 'react';
-import { Segment, Form, Label, Input } from 'semantic-ui-react';
+import { Segment, Form, Label, Input, Message } from 'semantic-ui-react';
 
 class SearchForm extends Component {
   constructor () {
     super();
     this.state = {
       searchQuery: '',
-      location: ''
-    }
+      location: '',
+      error: ''
+    };
+    this.search = this.search.bind(this)
   }
 
-  search() {
-    let url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${this.state.searchQuery}&location=${this.state.location}&limit=20`;
-    this.props.handleSearch(url);
+  async search() {
+    if(this.state.location){
+      let url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${this.state.searchQuery}&location=${this.state.location}&limit=20`;
+      await this.setState({error: ''});
+      this.props.handleSearch(url);
+    }
+    else {
+      this.setState({error: 'Please enter location!'})
+    }
   }
 
   handleChange = (event) => {
@@ -48,6 +56,9 @@ class SearchForm extends Component {
               </Segment>
             </Segment.Group>
           </Form.Group>
+          {this.state.error &&
+            <Message color='red' compact>{this.state.error}</Message>
+          }
       </Form>
     )
   }

@@ -4,7 +4,7 @@ import SearchForm from '../containers/SearchForm';
 import RenderSearchData from './RenderSearchData';
 import RenderSinglePlace from './RenderSinglePlace';
 import AddToTimetable from '../containers/AddToTimetable';
-import {Grid, Icon, Loader, Button, Segment } from 'semantic-ui-react';
+import {Grid, Icon, Loader, Button, Segment, Label } from 'semantic-ui-react';
 import { 
   placesSearchQuery, 
   singleSearchQuery, 
@@ -173,11 +173,11 @@ class SearchPage extends Component {
                   <Segment>
                     <RenderSinglePlace place={myPlace} reviews={reviews} />
                   </Segment>
-                  <Segment compact>
+                  <Segment compact textAlign='center'>
                     {myPlace.isAddedToList ? 
                       <React.Fragment>
-                        <Button color='teal' onClick={() => this.handleRemoveFromList(myPlace)}>Added to {myPlace.timetable.name}</Button>
-                        <Button color='red' onClick={() => this.toggleEditTimetable(myPlace.timetable.id)}>Edit</Button>
+                        <Label color='teal' size='large'>Added to {myPlace.timetable.name}</Label>
+                        <Button size='tiny' color='red' onClick={() => this.toggleEditTimetable(myPlace.timetable.id)}>Edit</Button>
                       </React.Fragment>
                        : 
                       <Button color='blue' onClick={this.toggleAddTimetable}>Add to my Timetable</Button>

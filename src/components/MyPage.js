@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Grid, Segment, Header, Tab, Button, Form, Image} from 'semantic-ui-react';
+import {Grid, Segment, Header, Tab, Button, Form, Image, Label, Icon} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {
   updateUserAccount, 
@@ -11,6 +11,7 @@ import {
   getSavedPlaces
  } from '../actions/APIsearch';
 import Timetable from './Timetable';
+import {Link} from 'react-router-dom';
 
 
 class MyPage extends Component {
@@ -146,6 +147,9 @@ class MyPage extends Component {
             {this.state.showTimetable &&
               <Segment color='teal'>
                 <Header as='h1' color='blue'>Timetables</Header>
+                {this.props.timetables.length === 0 && 
+                  <Label as={Link} to='/'><Icon name='plus' /> Search for places</Label>
+                }
                 <Tab menu={{ fluid: true, vertical: true, tabular: true }} panes={panes}  renderActiveOnly={false}/>
               </Segment>
             }
