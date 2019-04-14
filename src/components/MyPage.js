@@ -135,11 +135,13 @@ class MyPage extends Component {
                   <Form.Input label='Email' name='email' value={user.email} placeholder={this.props.user.email} onChange={this.handleUpdateInformation} />
                   <Form.Input label='Link to your profile picture' name='image' placeholder='Picture of size 200x200 if possible' onChange={this.handleUpdateInformation}/>
                 </Form.Group>
+                <br/>
                 <Form.Group widths='equal'>
                   <Form.Input label='Password' type='password' name='password' placeholder='Password' value={user.password} onChange={this.handleUpdateInformation} required/>
                   <Form.Input label='Password Confirmation' type='password' name='password_confirmation' value={user.password_confirmation} placeholder='Password Confirmation' onChange={this.handleUpdateInformation} required/>
                 </Form.Group>
                 {this.state.errors && <Header as='h5' color='red'>Passwords do not match/present. Please try again!</Header>}
+                <br/>
                 <Button type='submit' color='blue'>Update</Button><Button type='button' onClick={this.handleCancel}>Cancel</Button>
               </Form>
               </Segment>
