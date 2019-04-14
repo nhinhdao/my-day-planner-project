@@ -7,12 +7,26 @@ export default function mySearchReducer(state = defaultState, action) {
         loading: true
       }
     case 'FETCH_PLACES_SEARCH_QUERY':
-      data = action.payload.map(data => data = {
-        id: null,
-        code: data.id,
-        name: data.name,
-        category: data.categories[0] ? data.categories[0].title : 'N/A',
-        isAddedToList: false
+      data = action.payload.map(function(data){
+        let place = state.myList.find(place => place.code === data.id);
+        if(place){
+          return {
+            id: place.id,
+            code: place.code,
+            name: place.name,
+            category: place.category,
+            isAddedToList: true
+          }
+        }
+        else {
+          return {
+            id: null,
+            code: data.id,
+            name: data.name,
+            category: data.categories[0] ? data.categories[0].title : 'N/A',
+            isAddedToList: false
+          }
+        }
       });
       return {
         ...state,
@@ -21,6 +35,14 @@ export default function mySearchReducer(state = defaultState, action) {
       };
     case 'FETCH_SINGLE_SEARCH_QUERY':
       data = action.payload;
+      singlePlace = state.myList.find(place => place.code === data.id);
+      if(singlePlace){
+        return {
+          ...state,
+          singlePlace: singlePlace,
+          loading: false
+        };
+      }
       let searchItem = {
         id: null,
         code: data.id,
@@ -108,3 +130,4 @@ const defaultState = {
   reviews: [],
   loading: false
 }
+

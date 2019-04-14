@@ -18,7 +18,6 @@ class AddToTimeTable extends Component {
     await this.setState({
       options: [{ key: value, text: value, value }, ...this.state.options],
     });
-    this.props.handleChange(value)
   }
 
   handleChange = (e, { value }) => {

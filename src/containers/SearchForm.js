@@ -32,15 +32,19 @@ class SearchForm extends Component {
           <Form.Group widths='equal'>
             <Segment.Group horizontal>
               <Segment>
-              <Label color='teal' pointing='right'>Enter query</Label>
-              <Input size='mini' type='text' onChange={this.handleChange} name='searchQuery' value={this.state.searchQuery} placeholder='Ice cream or museum...'/>
+                <Form.Field inline>
+                  <Label color='teal' pointing='right'>Enter query</Label>
+                  <Input size='mini' type='text' onChange={this.handleChange} name='searchQuery' value={this.state.searchQuery} placeholder='Ice cream or museum...'/>
+                </Form.Field>
               </Segment>
               <Segment>
-              <Label color='teal' pointing='right'>Enter location</Label>
-              <Input size='mini' type='text' onChange={this.handleChange} name='location' value={this.state.location} placeholder='Newyork or 10065...' />
+                <Form.Field inline required>
+                  <Label color='teal' pointing='right'>Enter location</Label>
+                  <Input size='mini' type='text' onChange={this.handleChange} name='location' value={this.state.location} placeholder='Newyork or 10065...' />
+                </Form.Field>
               </Segment>
               <Segment>
-              <Form.Button  size='mini' color='blue'>Search</Form.Button>
+                <Form.Button  size='mini' color='blue'>Search</Form.Button>
               </Segment>
             </Segment.Group>
           </Form.Group>

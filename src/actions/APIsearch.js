@@ -143,6 +143,20 @@ export function getSingleTimetable(id) {
   }
 }
 
+export function deleteTimetable(id) {
+  const userID = localStorage.getItem("userID");
+  const url = `${BASEURL}/users/${userID}/timetables/${id}`;
+  return dispatch => {
+    dispatch({ type: "LOADING_QUERY" });
+    return axios.delete(url)
+      .then(() => dispatch({
+        type: "DELETE_TIMETABLE",
+        payload: id
+      }))
+      .catch(error => console.log(error));
+  }
+}
+
 export function updateUserAccount(user) {
   const id = localStorage.getItem('userID');
   const url = `${BASEURL}/users/${id}`;
@@ -169,6 +183,7 @@ export function signIn(user) {
     });
     return axios.post(url, user)
       .then(resp => {
+        if (resp.data.id) {
           // set userId to localstorage for accessing its projects later
           localStorage.setItem("userID", parseInt(resp.data.id));
           // Update redux sore with return data
@@ -177,9 +192,14 @@ export function signIn(user) {
             payload: resp.data
           });
           history.push("/")
-        }).catch((error) => {
-          console.log('error ' + error);
+        } 
+        else {
+          dispatch({
+            type: "SIGN_IN_ERROR",
+            errors: resp.data
         });
+      }
+    })
   }
 }
 

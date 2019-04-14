@@ -15,8 +15,8 @@ class RenderSearchData extends Component {
             <List.Item key={place.code} onClick={() => this.handleClick(place.code)} as='a'>
               {place.isAddedToList ? <List.Icon name='heart' color='pink' verticalAlign='middle' /> : <List.Icon name='heart outline' verticalAlign='middle' />}
               <List.Content>
-                <Header as='h4' color='blue'>{place.category}</Header>
-                <List.Description>{place.name}</List.Description>
+                <Header as='h4' color='blue'>{place.name}</Header>
+                <List.Description>{place.category}</List.Description>
               </List.Content>
             </List.Item>
           )}

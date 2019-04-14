@@ -1,7 +1,15 @@
 import React, { Component } from 'react'
 import {Grid, Segment, Header, Tab, Button, Form, Image} from 'semantic-ui-react';
 import {connect} from 'react-redux';
-import {updateUserAccount, getCurrentUser } from '../actions/APIsearch';
+import {
+  updateUserAccount, 
+  getCurrentUser, 
+  deleteTimetable,
+  updatePlace,
+  removeFromListQuery,
+  getAllTimetables,
+  getSavedPlaces
+ } from '../actions/APIsearch';
 import Timetable from './Timetable';
 
 
@@ -28,7 +36,8 @@ class MyPage extends Component {
     this.handleUpdateInformation = this.handleUpdateInformation.bind(this)
   }
 
-  componentDidMount(){
+  async componentDidMount(){
+    await this.props.getAllTimetables();
     const {user} = this.props;
     this.setState({
       ...this.state,
@@ -78,24 +87,30 @@ class MyPage extends Component {
 
   async updateTimetablePlace(place){
     await this.props.updatePlace(place);
-    this.props.getSingleTimetable(this.state.timetable.id).then(() => this.setState({timetable: this.props.timetable}))
+    this.props.getAllTimetables()
   }
 
   async handleRemoveFromList(place){
     await this.props.removeFromListQuery(place);
-    this.props.getSingleTimetable(this.state.timetable.id).then(() => this.setState({timetable: this.props.timetable}))
+    this.props.getAllTimetables()
+  }
+
+  async handleDeleteTimetable(id){
+    await this.props.deleteTimetable(id)
+    this.props.getSavedPlaces()
   }
 
   render() {
     const {user} = this.state;
-    const panes = this.props.timetables.map(timetable => timetable = 
+    const panes = this.props.timetables.map(timetable => (
       { menuItem: timetable.name, 
         pane: (
           <Tab.Pane key={timetable.id}>
             <Timetable timetable={timetable} updatePlace={this.updateTimetablePlace} handleDelete={this.handleRemoveFromList}/>
-            <button>Delete this timetable</button>
+            <Button floated='right' size='mini' color='teal' onClick={() => this.handleDeleteTimetable(timetable.id)}>Delete this timetable</Button>
           </Tab.Pane>
-        )}
+        )
+      })
     )
     return (
       <div id='myPage'>
@@ -154,7 +169,12 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getCurrentUser: id => dispatch(getCurrentUser(id)),
-    updateUserAccount: user => dispatch(updateUserAccount(user))
+    updateUserAccount: user => dispatch(updateUserAccount(user)),
+    deleteTimetable: id => dispatch(deleteTimetable(id)),
+    removeFromListQuery: place => dispatch(removeFromListQuery(place)),
+    updatePlace: place => dispatch(updatePlace(place)),
+    getAllTimetables: () => dispatch(getAllTimetables()),
+    getSavedPlaces: () => dispatch(getSavedPlaces())
   }
 }
 

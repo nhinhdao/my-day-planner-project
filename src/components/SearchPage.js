@@ -14,6 +14,7 @@ import {
   getAllTimetables,
   getSingleTimetable,
   createNewTimetable,
+  getSavedPlaces,
   updatePlace
  } from '../actions/APIsearch';
 
@@ -32,21 +33,23 @@ class SearchPage extends Component {
     this.addPlaceToTimetable = this.addPlaceToTimetable.bind(this);
     this.getTimetable = this.getTimetable.bind(this);
     this.updateTimetablePlace = this.updateTimetablePlace.bind(this);
-    this.handleRemoveFromList = this.handleRemoveFromList.bind(this)
+    this.handleRemoveFromList = this.handleRemoveFromList.bind(this);
+    this.handleSearchPlace = this.handleSearchPlace.bind(this)
   }
 
   componentDidMount(){
     this.props.getAllTimetables();
+    this.props.getSavedPlaces();
   }
 
   async getTimetable(name){
-    await this.props.getAllTimetables();
     let timetable = this.props.timetables.find(timetable => timetable.name === name);
     if (timetable){
       this.setState({timetable: timetable})
     }
     else {
-      this.props.createNewTimetable(name).then(() => this.setState({timetable: this.props.timetable}))
+      await this.props.createNewTimetable(name)
+      this.setState({timetable: this.props.timetable})
     }
   }
 
@@ -78,7 +81,11 @@ class SearchPage extends Component {
     };
     // debugger
     await this.props.addToListQuery(newPlace);
-    this.props.getSingleTimetable(this.state.timetable.id).then(() => this.setState({timetable: this.props.timetable}))
+    this.props.getSingleTimetable(this.state.timetable.id).then(() => this.setState({
+      timetable: this.props.timetable,
+      isLoading: false, 
+      addTimetable: false
+    }))
   }
 
   async updateTimetablePlace(place){
@@ -98,15 +105,23 @@ class SearchPage extends Component {
     this.setState({addTimetable: true})
   }
 
-  handleSearchPlace = (code) => {
+  toggleEditTimetable = (id) => {
+    let timetable = this.props.timetables.find(timetable => timetable.id === id);
+    this.setState({timetable: timetable})
+  }
+
+  async handleSearchPlace(code){
+    await this.props.getAllTimetables();
+    await this.props.getSavedPlaces();
     const placeUrl = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${code}`
     const reviewUrl = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${code}/reviews`;
-    this.props.singleSearchQuery(placeUrl);
+    await this.props.singleSearchQuery(placeUrl);
     this.props.reviewSearchQuery(reviewUrl).then(() => this.setState({isLoading: false, addTimetable: false}))
   }
 
-  handleAddFavorite = (place, reviews) => {
-    this.props.addToListQuery(place, reviews);
+  async handleAddFavorite(place, reviews){
+    await this.props.addToListQuery(place, reviews);
+    this.setState({isLoading: false, addTimetable: false})
   }
 
   async handleRemoveFromList(place){
@@ -117,7 +132,6 @@ class SearchPage extends Component {
   
   render() {
     const {places, myPlace, timetables} = this.props;
-
     const reviews = this.props.reviews.map(review => review = {
       id: review.id,
       user_name: review.user.name,
@@ -132,7 +146,6 @@ class SearchPage extends Component {
       text: timetable.name,
       value: timetable.name
     })
-
     return (
       <React.Fragment>
         <Grid columns='equal'>
@@ -160,8 +173,13 @@ class SearchPage extends Component {
                   <Segment>
                     <RenderSinglePlace place={myPlace} reviews={reviews} />
                   </Segment>
-                  <Segment textAlign='center'>
-                    {myPlace.isAddedToList ? <Button color='teal' onClick={() => this.handleRemoveFromList(myPlace)}>Added to list</Button> : 
+                  <Segment compact>
+                    {myPlace.isAddedToList ? 
+                      <React.Fragment>
+                        <Button color='teal' onClick={() => this.handleRemoveFromList(myPlace)}>Added to {myPlace.timetable.name}</Button>
+                        <Button color='red' onClick={() => this.toggleEditTimetable(myPlace.timetable.id)}>Edit</Button>
+                      </React.Fragment>
+                       : 
                       <Button color='blue' onClick={this.toggleAddTimetable}>Add to my Timetable</Button>
                     }
                     {this.state.addTimetable && 
@@ -210,7 +228,8 @@ const mapDispatchToProps = dispatch => {
     getAllTimetables: () => dispatch(getAllTimetables()),
     getSingleTimetable: id => dispatch(getSingleTimetable(id)),
     createNewTimetable: name => dispatch(createNewTimetable(name)),
-    updatePlace : (place) => dispatch(updatePlace(place))
+    updatePlace : (place) => dispatch(updatePlace(place)),
+    getSavedPlaces: () => dispatch(getSavedPlaces())
   }
 }
 

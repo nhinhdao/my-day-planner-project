@@ -31,6 +31,15 @@ export default function timetableReducer(state = defaultState, action) {
         error: false,
         loading: false
       }
+    case "DELETE_TIMETABLE":
+    // debugger
+      resp = action.payload;
+      return { 
+        ...state, 
+        all: state.all.filter(timetable => timetable.id !== resp),
+        error: false,
+        loading: false 
+      };
     default:
       return state;
   }

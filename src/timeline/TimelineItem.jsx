@@ -24,7 +24,7 @@ class TimelineItem extends Component{
 
   handleUpdatePlace = () => {
     // debugger
-    let place = {id: this.props.place.id, timetable_id: this.props.timetableId, time: this.state.time};
+    let place = {id: this.props.place.id, timetable_id: this.props.timetableID, time: this.state.time};
     this.props.updatePlace(place)
   }
 
@@ -41,7 +41,7 @@ class TimelineItem extends Component{
           <span className="time">
             <i className="fa fa-clock-o" /> {time}{" | "}
             <Popup
-            trigger={<Icon name='edit'color='blue' />}
+            trigger={<Icon name='edit' color='blue' />}
             content={
               <div>
                 <DatePicker
@@ -58,6 +58,7 @@ class TimelineItem extends Component{
             }
             on='click'
             position='top right'
+            wide='very'
           />{"|"}<Icon name='delete' color='red' onClick={() => this.props.handleDelete(place)}/>
           </span>
           <div className="time-line-header">
