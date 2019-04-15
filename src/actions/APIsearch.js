@@ -1,6 +1,6 @@
 import axios from 'axios';
 import history from '../components/history';
-const BASEURL = 'http://localhost:3001/api/v1';
+const BASEURL = 'https://my-planner.herokuapp.com/api/v1';
 const HEADERS = {
   headers: {
     'Authorization': `Bearer ${process.env.REACT_APP_YELP_TOKEN}`
