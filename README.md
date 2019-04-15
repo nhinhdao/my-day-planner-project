@@ -8,7 +8,12 @@ Firstly, Clone the back-end project: [Planner API](https://github.com/nhinhdao/p
 
 Follow Instruction on set up and run the back-end application. Make sure to run `rails server -p 3001` to specify server port for loading back-end data.
 
-Then in this project directory, 
+This application gets data from [Yelp Fusion API](https://www.yelp.com/fusion) so in order for the search to return data, please go on [Yelp Fusion](https://www.yelp.com/fusion) to make an account and get access token. 
+Then make an .env file with this key:
+
+```REACT_APP_YELP_TOKEN=<you access token>```.
+
+Back to terminal in this project directory, 
 
 - Run: `npm install` to install all dependencies
 
