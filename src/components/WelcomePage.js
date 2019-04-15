@@ -4,7 +4,8 @@ import SignUpForm from '../containers/SignUpForm';
 import {Button, Image, Grid, Header} from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router-dom';
-import logoMTP from '../images/logoMTP.jpg';
+import logo_mtp from '../images/logo_mtp.jpg';
+// import banner from '../images/banner.jpg';
 
 class WelcomePage extends Component {
   state = {
@@ -36,7 +37,7 @@ class WelcomePage extends Component {
         <Grid centered  id='form-login'>
           <Grid.Row>
             <Grid.Column width={10}>
-              <Image centered src={logoMTP}/>
+              <Image centered src={logo_mtp}/>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>

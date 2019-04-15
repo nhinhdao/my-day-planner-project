@@ -52,8 +52,8 @@ class TimelineItem extends Component{
                 timeIntervals={15}
                 dateFormat="MMMM d, yyyy h:mm aa"
                 timeCaption="Time"
-                />
-                <Label onClick={this.handleUpdatePlace} color='green' size='tiny'>Update</Label>
+                />{" "}
+                <Label onClick={this.handleUpdatePlace} color='teal' size='tiny'>Update Time Change</Label>
               </div>
             }
             on='click'
